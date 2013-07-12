@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * Implement hook_menu().
+ */
+function timelinejs_view_menu() {
+
+  $items['json'] = array(
+    'title' => t('rewrite'),
+    'page callback' => 'rewrite',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implement hook_block_info().
+ */
+function timelinejs_view_block_info(){
+  $blocks['timelinejs_view'] = array(
+      'info' => t('Display Timeline'),
+    );
+  return $blocks;
+}
+
+/**
+ * Implement hook_block_configure().
+ */
+function timelinejs_view_block_configure($delta){
+  $form = array();
+  if($delta == 'timelinejs_view'){
+    $form['timelinejs_view_headline'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Headline'),
+      '#size' => 60,
+      '#description' => t('Headline for timeline'),
+      '#default_value' => variable_get('timelinejs_view_headline', 'Headline'),
+      '#required' => TRUE,
+    );
+    $form['timelinejs_view_jsonpath'] = array(
+      '#type' => 'textfield',
+      '#title' => t('JSON Path'),
+      '#size' => 60,
+      '#description' => t('Full URL for Dates JSON Path'),
+      '#default_value' => variable_get('timelinejs_view_jsonpath', 'http://mapping.mdba.gov.au/timeline_json'),
+      '#required' => TRUE,
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implement hook_block_save().
+ */
+function timelinejs_view_block_save($delta = '', $edit = array()){
+  if($delta = 'timelinejs_view'){
+    variable_set('timelinejs_view_headline', $edit['timelinejs_view_headline']);
+    variable_set('timelinejs_view_jsonpath', $edit['timelinejs_view_jsonpath']);
+  }
+}
+
+function get_file($filename){
+  $file = file_Get_contents($filename);
+  return $file;
+}
+
+function rewrite(){
+  $json_file_of_dates = variable_get('timelinejs_view_jsonpath', 'hhttp://mapping.mdba.gov.au/timeline_json');
+  $dates = get_file($json_file_of_dates);
+  $dates = substr($dates, 1);
+  $dates = substr($dates, 1, -1);
+
+  $headline = variable_get('timelinejs_view_headline', 'This is a test');
+
+  $era = '"era":[{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","tag":"This is Optional"}],';
+  $chart = '"chart": [{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","value":"28"}]';
+
+
+  $timeline = '{"timeline":';
+  $timeline .= '{';
+  $timeline .= '"headline":"'. $headline .'",';
+  $timeline .= '"type":"default",';
+  $timeline .= '"text":"<p>Intro parra.</p>",';
+  $timeline .= '"'.$dates;
+  $timeline .= ','.$era;
+  $timeline .= $chart;
+  $timeline .= '}}'; 
+
+
+  echo($timeline);
+}

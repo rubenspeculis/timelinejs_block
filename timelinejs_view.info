@@ -1,0 +1,7 @@
+name = TimelineJS View
+description = Creates a view using TimelineJS
+package = MDBA
+core = 7.x
+dependencies[] = views
+dependencies[] = libraries
+files[] = views/timelinejs_view.views.inc

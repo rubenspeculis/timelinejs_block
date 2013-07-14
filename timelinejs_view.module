@@ -40,10 +40,18 @@ function timelinejs_view_block_configure($delta){
     );
     $form['timelinejs_view_jsonpath'] = array(
       '#type' => 'textfield',
-      '#title' => t('JSON Path'),
+      '#title' => t('Date JSON Path'),
       '#size' => 60,
       '#description' => t('Full URL for Dates JSON Path'),
       '#default_value' => variable_get('timelinejs_view_jsonpath', 'http://mapping.mdba.gov.au/timeline_json'),
+      '#required' => TRUE,
+    );
+    $form['timelinejs_view_era_jsonpath'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Era JSON Path'),
+      '#size' => 60,
+      '#description' => t('Full URL for Era JSON Path'),
+      '#default_value' => variable_get('timelinejs_view_era_jsonpath', 'http://mapping.mdba.gov.au/era_json'),
       '#required' => TRUE,
     );
   }
@@ -57,17 +65,13 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
   if($delta = 'timelinejs_view'){
     variable_set('timelinejs_view_headline', $edit['timelinejs_view_headline']);
     variable_set('timelinejs_view_jsonpath', $edit['timelinejs_view_jsonpath']);
+    variable_set('timelinejs_view_era_jsonpath', $edit['timelinejs_view_era_jsonpath']);
   }
-}
-
-function get_file($filename){
-  $file = file_Get_contents($filename);
-  return $file;
 }
 
 function rewrite(){
   $json_file_of_dates = variable_get('timelinejs_view_jsonpath', 'hhttp://mapping.mdba.gov.au/timeline_json');
-  $dates = get_file($json_file_of_dates);
+  $dates = file_get_contents($json_file_of_dates);
   $dates = substr($dates, 1);
   $dates = substr($dates, 1, -1);
 
@@ -75,7 +79,6 @@ function rewrite(){
 
   $era = '"era":[{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","tag":"This is Optional"}],';
   $chart = '"chart": [{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","value":"28"}]';
-
 
   $timeline = '{"timeline":';
   $timeline .= '{';

@@ -4,23 +4,57 @@
  * Implement hook_menu().
  */
 function timelinejs_view_menu() {
-
   $items['json'] = array(
     'title' => t('rewrite'),
     'page callback' => 'rewrite',
     'access arguments' => array('access administration pages'),
     'type' => MENU_CALLBACK,
   );
+  $items['admin/config/content/timelinejs_config'] = array(
+    'title' => t('TimelineJS Configuration'),
+    'description' => t('Configuration for TimelineJS'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('timelinejs_view_config_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
   return $items;
 }
+
+/**
+ * Page callback: TimelineJS Config.
+ *
+ * @See timelinejs_view_menu()
+ */
+function timelinejs_view_config_form($form, &$form_state){
+  $form['general_settings'] = array(
+    '#type' => 'fieldset',
+    '#collabsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#title' => t('General Config'),
+    '#description' => t('Configuration for TimelineJS')
+  );
+  $form['general_settings']['timelinejs_view_number_of_blocks'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of block'),
+    '#default_value' => variable_get('timelinejs_view_number_of_blocks', '2'),
+    '#description' => t('Please specify the number of blocks of Timelines you wisht to use'),
+    '#required' => TRUE
+  );
+  return system_settings_form($form);
+}
+
 
 /**
  * Implement hook_block_info().
  */
 function timelinejs_view_block_info(){
-  $blocks['timelinejs_view'] = array(
-      'info' => t('Display Timeline'),
+  $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
+  for($i=1; $i<=$number_of_blocks; $i++) {
+    $blocks['timelinejs_view_'.$i] = array(
+      'info' => t('Display Timeline '.$i),
     );
+  }
   return $blocks;
 }
 
@@ -29,31 +63,18 @@ function timelinejs_view_block_info(){
  */
 function timelinejs_view_block_configure($delta){
   $form = array();
-  if($delta == 'timelinejs_view'){
-    $form['timelinejs_view_headline'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Headline'),
-      '#size' => 60,
-      '#description' => t('Headline for timeline'),
-      '#default_value' => variable_get('timelinejs_view_headline', 'Headline'),
-      '#required' => TRUE,
-    );
-    $form['timelinejs_view_jsonpath'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Date JSON Path'),
-      '#size' => 60,
-      '#description' => t('Full URL for Dates JSON Path'),
-      '#default_value' => variable_get('timelinejs_view_jsonpath', 'http://mapping.mdba.gov.au/timeline_json'),
-      '#required' => TRUE,
-    );
-    $form['timelinejs_view_era_jsonpath'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Era JSON Path'),
-      '#size' => 60,
-      '#description' => t('Full URL for Era JSON Path'),
-      '#default_value' => variable_get('timelinejs_view_era_jsonpath', 'http://mapping.mdba.gov.au/era_json'),
-      '#required' => TRUE,
-    );
+  $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
+  for($i=1; $i<=$number_of_blocks; $i++){
+    if($delta === 'timelinejs_view_'.$i){
+      $form['timelinejs_view_headline_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#size' => 60,
+        '#description' => t('Headline for timeline'),
+        '#default_value' => variable_get('timelinejs_view_headline_'.$i, 'Headline'),
+        '#required' => TRUE,
+      );
+    }
   }
   return $form;
 }
@@ -62,10 +83,11 @@ function timelinejs_view_block_configure($delta){
  * Implement hook_block_save().
  */
 function timelinejs_view_block_save($delta = '', $edit = array()){
-  if($delta = 'timelinejs_view'){
-    variable_set('timelinejs_view_headline', $edit['timelinejs_view_headline']);
-    variable_set('timelinejs_view_jsonpath', $edit['timelinejs_view_jsonpath']);
-    variable_set('timelinejs_view_era_jsonpath', $edit['timelinejs_view_era_jsonpath']);
+  $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
+  for($i=1; $i<=$number_of_blocks; $i++){
+    if($delta === 'timelinejs_view_'.$i){
+      variable_set('timelinejs_view_headline_'.$i, $edit['timelinejs_view_headline_'.$i]);
+    }
   }
 }
 

@@ -16,11 +16,11 @@ function timelinejs_view_libraries_info() {
     'path' => 'compiled',
     'files' => array(
       'js' => array(
-        'compiled/js/timeline.js',
-        'compiled/js/storyjs-embed.js'
+        'js/timeline.js',
+        'js/storyjs-embed.js'
       ),
       'css' => array(
-        'compiled/css/timeline.css'
+        'css/timeline.css'
       )
     ),
   );

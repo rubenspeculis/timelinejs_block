@@ -30,7 +30,7 @@ function timelinejs_view_block_configure($delta){
   }
 
   $dates_checked = array();
- 
+
   $era_nodes = node_load_multiple(array(), array('type' => 'timelinejs_era'));
   $era_oprions = array();
   foreach($era_nodes as $era){
@@ -123,11 +123,11 @@ function timelinejs_view_block_view($delta = ''){
  * Implements hook_block_content.
  */
 function timelinejs_view_block_content($identifier = 1) {
-  $name = 'TimelineJS';
+  $library_name = 'TimelineJS';
   $width = variable_get('timelinejs_view_width_'.$identifier, '100%');
   $height = variable_get('timelinejs_view_height_'.$identifier, '600');
   $height = str_replace('px', '', $height);
-  if(($library = libraries_load($name)) && !empty($library['loaded'])){
+  if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     $content = "<script>jQuery(document).ready(function() {\n";
     $content .= 'createStoryJS({'."\n";
     $content .= "\ttype: 'timeline',\n";

@@ -187,7 +187,7 @@ function timelinejs_view_block_view($delta = ''){
   $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i) {
-      $block['subject'] = variable_get('timelinejs_view_headline_'.$i);
+      $block['subject'] = '';
       $block['content'] = timelinejs_view_block_content($i);
       return $block;
     }
@@ -246,7 +246,7 @@ function timelinejs_view_json($block_identifier = 1){
   $timeline .= '"type":"default",';
   $timeline .= '"text":"'.$intro.'",';
   $timeline .= $dates;
-  $timeline .= ','.$era;
+  $timeline .= $era;
   $timeline .= '}}'; 
 
   echo($timeline);
@@ -352,35 +352,38 @@ function _timelinejs_view_era_generator($block_id) {
     $nodes = node_load_multiple(array(), array('type' => $type));
   } else {
     $nodes = node_load_multiple($block_id_era);
-  } 
- 
-  $eraJson = '"era":[';
-  foreach($nodes as $era){
-    $entry = new stdClass();
-    $entry->startDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value']));
-    $entry->endDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value2']));
-    $entry->headline = $era->title;
-    $entry->text = $era->body['und'][0]['safe_value'];
-    $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
-    if(isset($era->field_timeline_category['und'][0]['tid'])){
-      $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
-    }
-
-    $eraJson .= '{"startDate":"' . $entry->startDate . '",';
-    $eraJson .= '"endDate":"' . $entry->endDate .'",';
-    $eraJson .= '"headline":"' . $entry->headline .'",';
-    $eraJson .= '"text":"' . $entry->text .'"';
-    if(isset($entry->tag)){
-      $eraJson .= ',"tag":"' . $entry->tag .'"';
-    }
-
-    if($era === end($nodes)){
-      $eraJson .= '}]';
-    } else {
-      $eraJson .= '},';
-    }
   }
-  return $eraJson;
+  if(!empty($nodes)){ 
+    $eraJson = ',"era":[';
+    foreach($nodes as $era){
+      $entry = new stdClass();
+      $entry->startDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value']));
+      $entry->endDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value2']));
+      $entry->headline = $era->title;
+      $entry->text = $era->body['und'][0]['safe_value'];
+      $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
+      if(isset($era->field_timeline_category['und'][0]['tid'])){
+        $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
+      }
+
+      $eraJson .= '{"startDate":"' . $entry->startDate . '",';
+      $eraJson .= '"endDate":"' . $entry->endDate .'",';
+      $eraJson .= '"headline":"' . $entry->headline .'",';
+      $eraJson .= '"text":"' . $entry->text .'"';
+      if(isset($entry->tag)){
+        $eraJson .= ',"tag":"' . $entry->tag .'"';
+      }
+
+      if($era === end($nodes)){
+        $eraJson .= '}]';
+      } else {
+        $eraJson .= '},';
+      }
+    }
+    return $eraJson;
+  } else {
+    return '';
+  }
 }
 
 function timelinejs_view_requirements($phase){

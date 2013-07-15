@@ -70,7 +70,6 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
 }
 
 function rewrite(){
-  //_timelinejs_view_dates_generator();
   $json_file_of_era = variable_get('timelinejs_view_era_jsonpath', 'http://mapping.mdba.gov.au/era_json');
 
   $era = file_get_contents($json_file_of_era);
@@ -90,7 +89,6 @@ function rewrite(){
   $timeline .= ',"'.$era;
   $timeline .= '}}'; 
 
-
   echo($timeline);
 }
 
@@ -108,14 +106,19 @@ function _timelinejs_view_dates_generator() {
     if(isset($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
     }
-    if(isset($date->field_media_url['und'][0]['value'])){
-      $entry->asset->media = $date->field_media_url['und'][0]['value'];
+    if(isset($date->field_media['und'][0]['fid'])){
+      $image = file_load($date->field_media['und'][0]['fid']); 
+      $entry->asset->media = file_create_url($image->uri);
+      $entry->asset->thumbnail = image_style_url('timelinejs_thumb', $image->uri);
     }
     if(isset($date->field_media_caption['und'][0]['value'])){
       $entry->asset->caption = $date->field_media_caption['und'][0]['value'];
     }
     if(isset($date->field_media_credit['und'][0]['value'])){
       $entry->asset->credit = $date->field_media_credit['und'][0]['value'];
+    }
+    if(isset($date->field_custom_class_name['und'][0]['value'])){
+      $entry->class = $date->field_custom_class_name['und'][0]['value'];
     }
     $dateJson .= '{"startDate":"' . $entry->startDate .'",';
     $dateJson .= '"endDate":"' . $entry->endDate .'",';
@@ -125,10 +128,14 @@ function _timelinejs_view_dates_generator() {
     if(isset($entry->tag)){
       $dateJson .= ',"tag":"' . $entry->tag .'"';
     }
+    if(isset($entry->class)){
+      $dateJson .= ',"classname":"'.$entry->class .'"';
+    }
 
     if(isset($entry->asset->media)){
       $dateJson .= ',"asset":{';
       $dateJson .= '"media":"'.$entry->asset->media.'"';
+      $dateJson .= ',"thumbnail":"'.$entry->asset->thumbnail.'"';
 
       if(!isset($entry->asset->caption) && !isset($entry->asset->credit)){
         $dateJson .= '}';
@@ -143,8 +150,6 @@ function _timelinejs_view_dates_generator() {
           $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
         }
     }
-    
-
 
     if($date === end($nodes)){
       $dateJson .= '}';
@@ -153,8 +158,6 @@ function _timelinejs_view_dates_generator() {
     }
   }
   $dateJson .= ']';
-  //dump($entry);
-  //dump($dateJson);
   return $dateJson;
 
 }

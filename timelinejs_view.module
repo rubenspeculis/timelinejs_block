@@ -63,6 +63,21 @@ function timelinejs_view_block_info(){
  */
 function timelinejs_view_block_configure($delta){
   $form = array();
+
+  $date_nodes = node_load_multiple(array(),array('type' => 'timelinejs_dates'));
+  $date_options = array();
+  foreach($date_nodes as $date){
+    $date_options[$date->nid] = $date->title;
+  }
+
+  $dates_checked = array();
+ 
+  $era_nodes = node_load_multiple(array(), array('type' => 'timelinejs_era'));
+  $era_oprions = array();
+  foreach($era_nodes as $era){
+    $era_options[$era->nid] = $era->title;
+  }
+
   $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i){
@@ -73,6 +88,18 @@ function timelinejs_view_block_configure($delta){
         '#description' => t('Headline for timeline'),
         '#default_value' => variable_get('timelinejs_view_headline_'.$i, 'Headline'),
         '#required' => TRUE,
+      );
+      $form['timelinejs_view_dates_'.$i] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Select the date nodes to appear on the timeline'),
+        '#options' => $date_options,
+        '#default_value' => variable_get('timelinejs_view_dates_'.$i, array())
+      );
+      $form['timelinejs_view_era_'.$i] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Select the eras to appear on the timeline'),
+        '#options' => $era_options,
+        '#default_value' => variable_get('timelinejs_view_era_'.$i, array())
       );
     }
   }
@@ -87,6 +114,8 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i){
       variable_set('timelinejs_view_headline_'.$i, $edit['timelinejs_view_headline_'.$i]);
+      variable_set('timelinejs_view_dates_'.$i, $edit['timelinejs_view_dates_'.$i]);
+      variable_set('timelinejs_view_era_'.$i, $edit['timelinejs_view_era_'.$i]);
     }
   }
 }

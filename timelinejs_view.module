@@ -37,6 +37,13 @@ function timelinejs_view_menu() {
     'access arguments' => array('access administration pages'),
     'type' => MENU_CALLBACK,
   );
+  $items['json/%'] = array(
+    'title' => t('JSON'),
+    'page callback' => 'timelinejs_view_json',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['admin/config/content/timelinejs_config'] = array(
     'title' => t('TimelineJS Configuration'),
     'description' => t('Configuration for TimelineJS'),
@@ -147,6 +154,39 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
   }
 }
 
+/**
+ * Implement hook_block_view().
+ */
+function timelinejs_view_block_view($delta = ''){
+  $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
+  for($i=1; $i<=$number_of_blocks; $i++){
+    if($delta === 'timelinejs_view_'.$i) {
+      $block['subject'] = variable_get('timelinejs_view_headline_'.$i);
+      $block['content'] = timelinejs_view_block_content($i);
+      return $block;
+    }
+  }
+}
+
+function timelinejs_view_block_content($identifier = 1) {
+ $name = 'TimelineJS'; 
+ if(($library = libraries_load($name)) && !empty($library['loaded'])){
+   $content = '<script>jQuery(document).ready(function() {'."\n";
+   $content .= 'createStoryJS({'."\n";
+   $content .= "\ttype: 'timeline',\n";
+   $content .= "\twidth: '100%', height: '600',\n";
+   $content .= "\tsource: '/json/$identifier',\n";
+   $content .= "\tembed_id: 'timeline_$identifier'});\n";
+   $content .= "})\n";
+   $content .= '</script>';
+   $content .= '<div id="timeline_'.$identifier.'"></div>';
+   return $content;
+ } else {
+   $error = ($library['error message']);
+   drupal_set_message($error, 'erroor');
+ }
+}
+
 function rewrite(){
   $dates = _timelinejs_view_dates_generator();
   $era =  _timelinejs_view_era_generator();
@@ -164,9 +204,32 @@ function rewrite(){
   echo($timeline);
 }
 
-function _timelinejs_view_dates_generator() {
-  $type = 'timelinejs_dates';
-  $nodes = node_load_multiple(array(), array('type' => $type));
+function timelinejs_view_json($block_identifier = 1){
+  $dates = _timelinejs_view_dates_generator((int)$block_identifier);
+  $era =  _timelinejs_view_era_generator((int)$block_identifier);
+  $headline = variable_get('timelinejs_view_headline_'.$block_identifier, 'This is a test');
+
+  $timeline = '{"timeline":';
+  $timeline .= '{';
+  $timeline .= '"headline":"'. $headline .'",';
+  $timeline .= '"type":"default",';
+  $timeline .= '"text":"<p>Intro parra.</p>",';
+  $timeline .= $dates;
+  $timeline .= ','.$era;
+  $timeline .= '}}'; 
+
+  echo($timeline);
+}
+
+function _timelinejs_view_dates_generator($block_id) {
+  $block_id_dates = variable_get('timelinejs_view_dates_'.$block_id);
+  if(!isset($block_id_dates)){
+    $type = 'timelinejs_dates';
+    $nodes = node_load_multiple(array(), array('type' => $type));
+  } else {
+    $nodes = node_load_multiple($block_id_dates);
+  }
+
   $dateJson = '"date":[';
   foreach($nodes as $date){
     $entry = new stdClass(); 
@@ -251,9 +314,15 @@ function _timelinejs_view_dates_generator() {
   return $dateJson;
 }
 
-function _timelinejs_view_era_generator() {
-  $type = 'timelinejs_era';
-  $nodes = node_load_multiple(array(), array('type' => $type));
+function _timelinejs_view_era_generator($block_id) {
+  $block_id_era = variable_get('timelinejs_view_era_'.$block_id);
+  if(!isset($block_id_era)){
+    $type = 'timelinejs_era';
+    $nodes = node_load_multiple(array(), array('type' => $type));
+  } else {
+    $nodes = node_load_multiple($block_id_era);
+  } 
+ 
   $eraJson = '"era":[';
   foreach($nodes as $era){
     $entry = new stdClass();

@@ -123,6 +123,29 @@ function timelinejs_view_block_configure($delta){
         '#default_value' => variable_get('timelinejs_view_headline_'.$i, 'Headline'),
         '#required' => TRUE,
       );
+      $form['timelinejs_view_intro_'.$i] = array(
+        '#type' => 'textarea',
+        '#title' => t('Introduction Paragraph'),
+        '#description' => t('Introduction for timeline'),
+        '#default_value' => variable_get('timelinejs_view_intro_'.$i, ''),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_view_width_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Width'),
+        '#size' => 60,
+        '#description' => t('Width of timeline. If using pixels then do not include the unit. If using percentage then do include the % symbol.'),
+        '#default_value' => variable_get('timelinejs_view_width_'.$i, '100%'),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_view_height_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Width'),
+        '#size' => 60,
+        '#description' => t('Height of the timeline. As above.'),
+        '#default_value' => variable_get('timelinejs_view_height_'.$i, '600'),
+        '#required' => TRUE,
+      );
       $form['timelinejs_view_dates_'.$i] = array(
         '#type' => 'checkboxes',
         '#title' => t('Select the date nodes to appear on the timeline'),
@@ -148,6 +171,9 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i){
       variable_set('timelinejs_view_headline_'.$i, $edit['timelinejs_view_headline_'.$i]);
+      variable_set('timelinejs_view_intro_'.$i, $edit['timelinejs_view_intro_'.$i]);
+      variable_set('timelinejs_view_width_'.$i, $edit['timelinejs_view_width_'.$i]);
+      variable_set('timelinejs_view_height_'.$i, $edit['timelinejs_view_height_'.$i]);
       variable_set('timelinejs_view_dates_'.$i, $edit['timelinejs_view_dates_'.$i]);
       variable_set('timelinejs_view_era_'.$i, $edit['timelinejs_view_era_'.$i]);
     }
@@ -169,12 +195,15 @@ function timelinejs_view_block_view($delta = ''){
 }
 
 function timelinejs_view_block_content($identifier = 1) {
- $name = 'TimelineJS'; 
- if(($library = libraries_load($name)) && !empty($library['loaded'])){
+  $name = 'TimelineJS';
+  $width = variable_get('timelinejs_view_width_'.$identifier, '100%');
+  $height = variable_get('timelinejs_view_height_'.$identifier, '600');
+  $height = str_replace('px', '', $height);
+  if(($library = libraries_load($name)) && !empty($library['loaded'])){
    $content = '<script>jQuery(document).ready(function() {'."\n";
    $content .= 'createStoryJS({'."\n";
    $content .= "\ttype: 'timeline',\n";
-   $content .= "\twidth: '100%', height: '600',\n";
+   $content .= "\twidth: '$width', height: '$height',\n";
    $content .= "\tsource: '/json/$identifier',\n";
    $content .= "\tembed_id: 'timeline_$identifier'});\n";
    $content .= "})\n";
@@ -208,12 +237,14 @@ function timelinejs_view_json($block_identifier = 1){
   $dates = _timelinejs_view_dates_generator((int)$block_identifier);
   $era =  _timelinejs_view_era_generator((int)$block_identifier);
   $headline = variable_get('timelinejs_view_headline_'.$block_identifier, 'This is a test');
+  $intro = variable_get('timelinejs_view_intro_'.$block_identifier, '');
+  $intro = str_replace(array("\r\n", "\r", "\n"), "", $intro);
 
   $timeline = '{"timeline":';
   $timeline .= '{';
   $timeline .= '"headline":"'. $headline .'",';
   $timeline .= '"type":"default",';
-  $timeline .= '"text":"<p>Intro parra.</p>",';
+  $timeline .= '"text":"'.$intro.'",';
   $timeline .= $dates;
   $timeline .= ','.$era;
   $timeline .= '}}'; 
@@ -237,7 +268,7 @@ function _timelinejs_view_dates_generator($block_id) {
     $entry->endDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value2']));
     $entry->headline = $date->title;
     $entry->text = $date->body['und'][0]['safe_value'];
-    $entry->text = str_replace(PHP_EOL, '', $entry->text);
+    $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
     if(isset($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
     }
@@ -330,7 +361,7 @@ function _timelinejs_view_era_generator($block_id) {
     $entry->endDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value2']));
     $entry->headline = $era->title;
     $entry->text = $era->body['und'][0]['safe_value'];
-    $entry->text = str_replace(PHP_EOL, '', $entry->text);
+    $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
     if(isset($era->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
     }

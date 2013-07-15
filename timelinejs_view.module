@@ -70,26 +70,91 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
 }
 
 function rewrite(){
-  $json_file_of_dates = variable_get('timelinejs_view_jsonpath', 'hhttp://mapping.mdba.gov.au/timeline_json');
-  $dates = file_get_contents($json_file_of_dates);
-  $dates = substr($dates, 1);
-  $dates = substr($dates, 1, -1);
+  //_timelinejs_view_dates_generator();
+  $json_file_of_era = variable_get('timelinejs_view_era_jsonpath', 'http://mapping.mdba.gov.au/era_json');
+
+  $era = file_get_contents($json_file_of_era);
+  $era = substr($era, 1);
+  $era = substr($era, 1, -1);
+
+  $dates = _timelinejs_view_dates_generator();
 
   $headline = variable_get('timelinejs_view_headline', 'This is a test');
-
-  $era = '"era":[{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","tag":"This is Optional"}],';
-  $chart = '"chart": [{"startDate":"2013,01,10","endDate":"2013,12,11","headline":"Headline Goes Here","value":"28"}]';
 
   $timeline = '{"timeline":';
   $timeline .= '{';
   $timeline .= '"headline":"'. $headline .'",';
   $timeline .= '"type":"default",';
   $timeline .= '"text":"<p>Intro parra.</p>",';
-  $timeline .= '"'.$dates;
-  $timeline .= ','.$era;
-  $timeline .= $chart;
+  $timeline .= $dates;
+  $timeline .= ',"'.$era;
   $timeline .= '}}'; 
 
 
   echo($timeline);
+}
+
+function _timelinejs_view_dates_generator() {
+  $type = 'timelinejs_dates';
+  $nodes = node_load_multiple(array(), array('type' => $type));
+  $dateJson = '"date":[';
+  foreach($nodes as $date){
+    $entry = new stdClass(); 
+    $entry->startDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value']));
+    $entry->endDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value2']));
+    $entry->headline = $date->title;
+    $entry->text = $date->body['und'][0]['safe_value'];
+    $entry->text = str_replace(PHP_EOL, '', $entry->text);
+    if(isset($date->field_timeline_category['und'][0]['tid'])){
+      $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
+    }
+    if(isset($date->field_media_url['und'][0]['value'])){
+      $entry->asset->media = $date->field_media_url['und'][0]['value'];
+    }
+    if(isset($date->field_media_caption['und'][0]['value'])){
+      $entry->asset->caption = $date->field_media_caption['und'][0]['value'];
+    }
+    if(isset($date->field_media_credit['und'][0]['value'])){
+      $entry->asset->credit = $date->field_media_credit['und'][0]['value'];
+    }
+    $dateJson .= '{"startDate":"' . $entry->startDate .'",';
+    $dateJson .= '"endDate":"' . $entry->endDate .'",';
+    $dateJson .= '"headline":"' . $entry->headline .'",';
+    $dateJson .= '"text":"' . $entry->text .'"';
+
+    if(isset($entry->tag)){
+      $dateJson .= ',"tag":"' . $entry->tag .'"';
+    }
+
+    if(isset($entry->asset->media)){
+      $dateJson .= ',"asset":{';
+      $dateJson .= '"media":"'.$entry->asset->media.'"';
+
+      if(!isset($entry->asset->caption) && !isset($entry->asset->credit)){
+        $dateJson .= '}';
+      } elseif(isset($entry->asset->caption)){
+          $dateJson .= ',"caption":"'.$entry->asset->caption.'"';
+          if(!isset($entry->asset->credit)){
+            $dateJson .= '}';
+          } else {
+            $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+          }
+      } else {
+          $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+        }
+    }
+    
+
+
+    if($date === end($nodes)){
+      $dateJson .= '}';
+    } else {
+      $dateJson .= '},';
+    }
+  }
+  $dateJson .= ']';
+  //dump($entry);
+  //dump($dateJson);
+  return $dateJson;
+
 }

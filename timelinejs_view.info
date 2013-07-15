@@ -1,6 +1,5 @@
 name = TimelineJS View
-description = Creates a view using TimelineJS
-package = MDBA
+description = Create blocks using TimelineJS.
+package = Visualisation
 core = 7.x
-dependencies[] = views
 dependencies[] = libraries

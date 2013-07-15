@@ -269,6 +269,7 @@ function _timelinejs_view_dates_generator($block_id) {
     $entry->headline = $date->title;
     $entry->text = $date->body['und'][0]['safe_value'];
     $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
+    $entry->text = addslashes($entry->text);
     if(isset($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
     }

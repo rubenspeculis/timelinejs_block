@@ -70,7 +70,6 @@ function timelinejs_view_block_configure($delta){
         '#size' => 60,
         '#description' => t('URL for title slider. Do not use in conjuction with "Media for title slide".'),
         '#default_value' => variable_get('timelinejs_view_title_image_url_'.$i, ''),
-        '#required' => TRUE,
       );
       $form['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',

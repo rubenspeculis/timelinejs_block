@@ -12,12 +12,24 @@ function timelinejs_view_json($block_identifier = 1){
   $headline = variable_get('timelinejs_view_headline_'.$block_identifier, 'This is a test');
   $intro = variable_get('timelinejs_view_intro_'.$block_identifier, '');
   $intro = str_replace(array("\r\n", "\r", "\n"), "", $intro);
+  $media = variable_get('timelinejs_view_title_image_'.$block_identifier);
+  $media_url = variable_get('timelinejs_view_title_image_url_'.$block_identifier);
+
+  if($media!=''){
+    $media = file_load($media);
+    $media_url = file_create_url($media->uri);
+  }
 
   $timeline = '{"timeline":';
   $timeline .= '{';
   $timeline .= '"headline":"'. $headline .'",';
   $timeline .= '"type":"default",';
   $timeline .= '"text":"'.$intro.'",';
+  if(isset($media_url)){
+    $timeline .= '"asset":{';
+    $timeline .= '"media":"'.$media_url.'"';
+    $timeline .= '},';
+  }
   $timeline .= $dates;
   $timeline .= $era;
   $timeline .= '}}'; 

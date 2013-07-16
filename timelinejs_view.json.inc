@@ -13,7 +13,9 @@ function timelinejs_view_json($block_identifier = 1){
   $intro = variable_get('timelinejs_view_intro_'.$block_identifier, '');
   $intro = str_replace(array("\r\n", "\r", "\n"), "", $intro);
   $media = variable_get('timelinejs_view_title_image_'.$block_identifier);
-  $media_url = variable_get('timelinejs_view_title_image_url_'.$block_identifier);
+  $media_url = variable_get('timelinejs_view_title_image_url_'.$block_identifier, '');
+  $caption = variable_get('timelinejs_view_title_image_caption_'.$block_identifier, '');
+  $credit = variable_get('timelinejs_view_title_image_credit_'.$block_identifier, '');
 
   if($media!=''){
     $media = file_load($media);
@@ -25,9 +27,15 @@ function timelinejs_view_json($block_identifier = 1){
   $timeline .= '"headline":"'. $headline .'",';
   $timeline .= '"type":"default",';
   $timeline .= '"text":"'.$intro.'",';
-  if(isset($media_url)){
+  if($media_url != ''){
     $timeline .= '"asset":{';
     $timeline .= '"media":"'.$media_url.'"';
+    if($caption != ''){
+      $timeline .= ',"caption":"'.$caption.'"';
+    }
+    if($credit != ''){
+      $timeline .= ',"credit":"'.$credit.'"';
+    }
     $timeline .= '},';
   }
   $timeline .= $dates;

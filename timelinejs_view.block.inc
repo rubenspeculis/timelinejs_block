@@ -95,7 +95,14 @@ function timelinejs_view_block_configure($delta){
         '#description' => t('Caption for title image.'),
         '#default_value' => variable_get('timelinejs_view_title_image_caption_'.$i, ''),
       );
-      $form['timelinejs_view_width_'.$i] = array(
+      $form['timelinejs_view_display'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Display Configuration'),
+        '#weight' => 0,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE
+      );
+      $form['timelinejs_view_display']['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
         '#size' => 60,
@@ -103,7 +110,7 @@ function timelinejs_view_block_configure($delta){
         '#default_value' => variable_get('timelinejs_view_width_'.$i, '100%'),
         '#required' => TRUE,
       );
-      $form['timelinejs_view_height_'.$i] = array(
+      $form['timelinejs_view_display']['timelinejs_view_height_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
         '#size' => 60,

@@ -40,7 +40,16 @@ function timelinejs_view_block_configure($delta){
   $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i){
-      $form['timelinejs_view_headline_'.$i] = array(
+      $intro = variable_get('timelinejs_view_intro_'.$i, '');
+      if($intro != '') $intro = $intro['value'];
+      $form['timelinejs_view_title_slider'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Title Page Configuration'),
+        '#weight' => 0,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE
+      );
+      $form['timelinejs_view_title_slider']['timelinejs_view_headline_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Headline'),
         '#size' => 60,
@@ -48,15 +57,15 @@ function timelinejs_view_block_configure($delta){
         '#default_value' => variable_get('timelinejs_view_headline_'.$i, 'Headline'),
         '#required' => TRUE,
       );
-      $form['timelinejs_view_intro_'.$i] = array(
+      $form['timelinejs_view_title_slider']['timelinejs_view_intro_'.$i] = array(
         '#type' => 'text_format',
         '#title' => t('Introduction Paragraph'),
         '#description' => t('Introduction for timeline'),
-        '#default_value' => variable_get('timelinejs_view_intro_'.$i, ''),
+        '#default_value' => $intro,
         '#format' => 'full_html',
         '#required' => TRUE,
       );
-      $form['timelinejs_view_title_image_'.$i] = array(
+      $form['timelinejs_view_title_slider']['timelinejs_view_title_image_'.$i] = array(
         '#type' => 'managed_file',
         '#title' => t('Title image file'),
         '#title_display' => 'before',
@@ -65,21 +74,21 @@ function timelinejs_view_block_configure($delta){
         '#upload_validators' => array("file_validate_extensions" => array('png gif jpg')),
         '#default_value' => variable_get('timelinejs_view_title_image_'.$i, '')
       );
-      $form['timelinejs_view_title_image_url_'.$i] = array(
+      $form['timelinejs_view_title_slider']['timelinejs_view_title_image_url_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Title Image URL'),
         '#size' => 60,
         '#description' => t('URL for title slider. Do not use in conjuction with "Title image file".'),
         '#default_value' => variable_get('timelinejs_view_title_image_url_'.$i, ''),
       );
-      $form['timelinejs_view_title_image_credit_'.$i] = array(
+      $form['timelinejs_view_title_slider']['timelinejs_view_title_image_credit_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Credit for title image'),
         '#size' => 60,
         '#description' => t('Credit notes for title image'),
         '#default_value' => variable_get('timelinejs_view_title_image_credit_'.$i, ''),
       );
-      $form['timelinejs_view_title_image_caption_'.$i] = array(
+      $form['timelinejs_view_title_slider']['timelinejs_view_title_image_caption_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Caption for title image'),
         '#size' => 60,

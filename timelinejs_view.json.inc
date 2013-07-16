@@ -12,6 +12,7 @@ function timelinejs_view_json($block_identifier = 1){
   $headline = variable_get('timelinejs_view_headline_'.$block_identifier, 'This is a test');
   $intro = variable_get('timelinejs_view_intro_'.$block_identifier, '');
   $intro = str_replace(array("\r\n", "\r", "\n"), "", $intro['value']);
+  $intro = addslashes($intro);
   $media = variable_get('timelinejs_view_title_image_'.$block_identifier);
   $media_url = variable_get('timelinejs_view_title_image_url_'.$block_identifier, '');
   $caption = variable_get('timelinejs_view_title_image_caption_'.$block_identifier, '');

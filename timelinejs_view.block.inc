@@ -23,10 +23,39 @@ function timelinejs_view_block_info(){
 function timelinejs_view_block_configure($delta){
   $form = array();
 
-  $date_nodes = node_load_multiple(array(),array('type' => 'timelinejs_dates'));
+  $header_dates = array(
+    'title' => array('data' => t('Title'), 'field' => 'n.title'),
+    'startDate' => array('data' => t('Start Date'), 'field' => 'd.field_dates_value'),
+    'endDate' => array('data' => t('End Date'), 'field' => 'd.field_dates_value2'),
+    'type' => array('data' => t('Type') , 'field' => 'n.type'),
+    'status' => array('data' => t('Status'), 'field' => 'n.status'),
+  );
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_dates', 'd', 'n.nid = d.entity_id');
+  $dates_nids = $query
+    ->fields('n', array('nid'))
+    ->fields('d', array('field_dates_value'))
+    ->fields('d', array('field_dates_value2'))
+    ->extend('TableSort')
+    ->orderByHeader($header_dates)
+    ->execute()
+    ->fetchCol();
+  $date_nodes = node_load_multiple($dates_nids,array('type' => 'timelinejs_dates'));
   $date_options = array();
   foreach($date_nodes as $date){
-    $date_options[$date->nid] = $date->title;
+    $date_options[$date->nid] = array(
+      'title' => array(
+        'data' => array(
+          '#type' => 'link',
+          '#title' => $date->title,
+          '#href' => 'node/'.$date->nid,
+        )
+      ),
+      'startDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value'])),
+      'endDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value2'])),
+      'type' => check_plain(node_type_get_name($date)),
+      'status' => $date->status ? t('Published') : t('Not Published'),
+    );
   }
 
   $dates_checked = array();
@@ -126,9 +155,11 @@ function timelinejs_view_block_configure($delta){
         '#collapsed' => FALSE
       );
       $form['timelinejs_view_dates']['timelinejs_view_dates_'.$i] = array(
-        '#type' => 'checkboxes',
+        '#type' => 'tableselect',
         '#title' => t('Select the date nodes to appear on the timeline'),
+        '#header' => $header_dates,
         '#options' => $date_options,
+        '#empty' => t('No Content available'),
         '#default_value' => variable_get('timelinejs_view_dates_'.$i, array()),
         '#required' => TRUE
       );

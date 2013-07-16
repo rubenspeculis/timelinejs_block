@@ -177,6 +177,20 @@ function timelinejs_block_block_configure($delta){
         '#default_value' => variable_get('timelinejs_block_height_'.$i, '600'),
         '#required' => TRUE,
       );
+      $form['timelinejs_block_display']['timelinejs_block_granularity_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Select granularity'),
+        '#size' => 60,
+        '#description' => t('Select Granularity of display, Year, Year and Month, Year, Month and Day'),
+        '#default_value' => variable_get('timelinejs_block_granularity_'.$i, 'ymd'),
+        '#options' => array(
+          'ymd' => t('Year, Month and Day'),
+          'ym'  => t('Year and Month'),
+          'y'   => t('Year')
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
       $form['timelinejs_block_dates'] = array(
         '#type' => 'fieldset',
         '#title' => t('Select Dates for Timeline'),
@@ -228,6 +242,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_title_image_credit_'.$i, $edit['timelinejs_block_title_image_credit_'.$i]);
       variable_set('timelinejs_block_width_'.$i, $edit['timelinejs_block_width_'.$i]);
       variable_set('timelinejs_block_height_'.$i, $edit['timelinejs_block_height_'.$i]);
+      variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
     }

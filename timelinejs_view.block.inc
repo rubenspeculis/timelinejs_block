@@ -64,6 +64,14 @@ function timelinejs_view_block_configure($delta){
         '#upload_validators' => array("file_validate_extensions" => array('png gif jpg')),
         '#default_value' => variable_get('timelinejs_view_title_image_'.$i, '')
       );
+      $form['timelinejs_view_title_image_url_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Title Slider URL'),
+        '#size' => 60,
+        '#description' => t('URL for title slider. Do not use in conjuction with "Media for title slide".'),
+        '#default_value' => variable_get('timelinejs_view_title_image_url_'.$i, ''),
+        '#required' => TRUE,
+      );
       $form['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
@@ -107,6 +115,7 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_view_headline_'.$i, $edit['timelinejs_view_headline_'.$i]);
       variable_set('timelinejs_view_intro_'.$i, $edit['timelinejs_view_intro_'.$i]);
       variable_set('timelinejs_view_title_image_'.$i, $edit['timelinejs_view_title_image_'.$i]);
+      variable_set('timelinejs_view_title_image_url_'.$i, $edit['timelinejs_view_title_image_url_'.$i]);
       variable_set('timelinejs_view_width_'.$i, $edit['timelinejs_view_width_'.$i]);
       variable_set('timelinejs_view_height_'.$i, $edit['timelinejs_view_height_'.$i]);
       variable_set('timelinejs_view_dates_'.$i, $edit['timelinejs_view_dates_'.$i]);

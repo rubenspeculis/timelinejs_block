@@ -57,19 +57,33 @@ function timelinejs_view_block_configure($delta){
       );
       $form['timelinejs_view_title_image_'.$i] = array(
         '#type' => 'managed_file',
-        '#title' => t('Media for title slide'),
+        '#title' => t('Title image file'),
         '#title_display' => 'before',
-        '#description' => t('Only image files are allowed.'),
+        '#description' => t('Only image files are allowed. Do not use if using "Title Image URL"'),
         '#upload_location' => 'public://img/',
         '#upload_validators' => array("file_validate_extensions" => array('png gif jpg')),
         '#default_value' => variable_get('timelinejs_view_title_image_'.$i, '')
       );
       $form['timelinejs_view_title_image_url_'.$i] = array(
         '#type' => 'textfield',
-        '#title' => t('Title Slider URL'),
+        '#title' => t('Title Image URL'),
         '#size' => 60,
-        '#description' => t('URL for title slider. Do not use in conjuction with "Media for title slide".'),
+        '#description' => t('URL for title slider. Do not use in conjuction with "Title image file".'),
         '#default_value' => variable_get('timelinejs_view_title_image_url_'.$i, ''),
+      );
+      $form['timelinejs_view_title_image_credit_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Credit for title image'),
+        '#size' => 60,
+        '#description' => t('Credit notes for title image'),
+        '#default_value' => variable_get('timelinejs_view_title_image_credit_'.$i, ''),
+      );
+      $form['timelinejs_view_title_image_caption_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Caption for title image'),
+        '#size' => 60,
+        '#description' => t('Caption for title image.'),
+        '#default_value' => variable_get('timelinejs_view_title_image_caption_'.$i, ''),
       );
       $form['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',
@@ -91,7 +105,8 @@ function timelinejs_view_block_configure($delta){
         '#type' => 'checkboxes',
         '#title' => t('Select the date nodes to appear on the timeline'),
         '#options' => $date_options,
-        '#default_value' => variable_get('timelinejs_view_dates_'.$i, array())
+        '#default_value' => variable_get('timelinejs_view_dates_'.$i, array()),
+        '#required' => TRUE
       );
       $form['timelinejs_view_era_'.$i] = array(
         '#type' => 'checkboxes',
@@ -115,6 +130,8 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_view_intro_'.$i, $edit['timelinejs_view_intro_'.$i]);
       variable_set('timelinejs_view_title_image_'.$i, $edit['timelinejs_view_title_image_'.$i]);
       variable_set('timelinejs_view_title_image_url_'.$i, $edit['timelinejs_view_title_image_url_'.$i]);
+      variable_set('timelinejs_view_title_image_caption_'.$i, $edit['timelinejs_view_title_image_caption_'.$i]);
+      variable_set('timelinejs_view_title_image_credit_'.$i, $edit['timelinejs_view_title_image_credit_'.$i]);
       variable_set('timelinejs_view_width_'.$i, $edit['timelinejs_view_width_'.$i]);
       variable_set('timelinejs_view_height_'.$i, $edit['timelinejs_view_height_'.$i]);
       variable_set('timelinejs_view_dates_'.$i, $edit['timelinejs_view_dates_'.$i]);

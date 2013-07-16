@@ -28,6 +28,49 @@ function timelinejs_view_config_form($form, &$form_state){
     'SansitaOne-Kameron' => 'Sansita One and Kameron',
     'Pacifico-Arimo' => 'Pacifico and Arimo'
   );
+  $locale = array(
+    "af" => "Afrikaans",
+    "ar" => "Arabic (beta)",
+    "bg" => "Bulgarian",
+    "ca" => "Catalan",
+    "cz" => "Czech",
+    "da" => "Danish",
+    "de" => "German / Deutsch",
+    "el" => "Greek",
+    "en" => "English",
+    "es" => "Spanish",
+    "eu" => "Basque / Euskara",
+    "fi" => "Finnish",
+    "fo" => "Faroese",
+    "fr" => "French",
+    "gl" => "Galician",
+    "hu" => "Hungarian",
+    "hy" => "Armenian",
+    "id" => "Indonesian",
+    "is" => "Icelandic",
+    "it" => "Italian",
+    "iw" => "Hebrew (beta)",
+    "ja" => "Japanese",
+    "ka" => "Georgian",
+    "ko" => "Korean",
+    "lv" => "Latvian",
+    "nl" => "Dutch",
+    "no" => "Norwegian",
+    "pl" => "Polish",
+    "pt-br" => "Brazilian Portuguese",
+    "pt" => "Portuguese",
+    "ru" => "Russian",
+    "sk" => "Slovak",
+    "sl" => "Slovenian",
+    "sr-cy" => "Serbian (Cyrillic)",
+    "sr" => "Serbian (Latin)",
+    "sv" => "Swedish",
+    "ta" => "Tamil",
+    "tl" => "Tagalog",
+    "tr" => "Turkish",
+    "zh-cn" => "Chinese",
+    "zh-tw" => "Taiwanese"
+  );
 
   $form['general_settings'] = array(
     '#type' => 'fieldset',
@@ -53,6 +96,14 @@ function timelinejs_view_config_form($form, &$form_state){
   );
   $form['general_settings']['timelinejs_view_fonts'] = array(
     '#markup' => '<img src="/'.drupal_get_path('module', 'timelinejs_view').'/img/fonts.png" alt="Fonts available" />',
+  );
+  $form['general_settings']['timelinejs_view_locale'] = array(
+    '#type' => 'select',
+    '#title' => t('Location'),
+    '#default_value' => variable_get('timelinejs_view_locale', 'en'),
+    '#description' => t('Please specify the location you choose to use'),
+    '#options' => $locale,
+    '#required' => TRUE
   );
   return system_settings_form($form);
 }

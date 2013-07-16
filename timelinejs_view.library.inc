@@ -27,7 +27,7 @@ function timelinejs_view_libraries_info() {
       'css' => array(
         'css/timeline.css'
       )
-    ),
+    )
   );
   return $libraries;
 }

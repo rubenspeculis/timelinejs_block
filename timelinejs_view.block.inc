@@ -49,10 +49,11 @@ function timelinejs_view_block_configure($delta){
         '#required' => TRUE,
       );
       $form['timelinejs_view_intro_'.$i] = array(
-        '#type' => 'textarea',
+        '#type' => 'text_format',
         '#title' => t('Introduction Paragraph'),
         '#description' => t('Introduction for timeline'),
         '#default_value' => variable_get('timelinejs_view_intro_'.$i, ''),
+        '#format' => 'full_html',
         '#required' => TRUE,
       );
       $form['timelinejs_view_title_image_'.$i] = array(

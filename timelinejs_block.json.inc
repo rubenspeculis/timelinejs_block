@@ -48,6 +48,7 @@ function timelinejs_block_json($block_identifier = 1){
 
 function _timelinejs_block_dates_generator($block_id) {
   $block_id_dates = variable_get('timelinejs_block_dates_'.$block_id);
+  $timezone = date_default_timezone();
   if(!isset($block_id_dates)){
     $type = 'timelinejs_dates';
     $nodes = node_load_multiple(array(), array('type' => $type));
@@ -58,8 +59,17 @@ function _timelinejs_block_dates_generator($block_id) {
   $dateJson = '"date":[';
   foreach($nodes as $date){
     $entry = new stdClass(); 
-    $entry->startDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value']));
-    $entry->endDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value2']));
+
+    $startDate = date_create($date->field_dates['und'][0]['value']);
+    $endDate = date_create($date->field_dates['und'][0]['value2']);
+
+    date_timezone_set($startDate, timezone_open($timezone));
+    date_timezone_set($endDate, timezone_open($timezone));
+    $adjustedStart = date_format($startDate, 'U') + date_offset_get($startDate);
+    $adjustedEnd = date_format($endDate, 'U') + date_offset_get($endDate);
+
+    $entry->startDate = date('Y,m,d', $adjustedStart);
+    $entry->endDate = date('Y,m,d', $adjustedEnd);
     $entry->headline = $date->title;
     $entry->text = $date->body['und'][0]['safe_value'];
     if(isset($date->field_read_more['und'][0]['value'])){

@@ -55,6 +55,15 @@ function timelinejs_view_block_configure($delta){
         '#default_value' => variable_get('timelinejs_view_intro_'.$i, ''),
         '#required' => TRUE,
       );
+      $form['timelinejs_view_title_image_'.$i] = array(
+        '#type' => 'managed_file',
+        '#title' => t('Media for title slide'),
+        '#title_display' => 'before',
+        '#description' => t('Only image files are allowed.'),
+        '#upload_location' => 'public://img/',
+        '#upload_validators' => array("file_validate_extensions" => array('png gif jpg')),
+        '#default_value' => variable_get('timelinejs_view_title_image_'.$i, '')
+      );
       $form['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
@@ -97,6 +106,7 @@ function timelinejs_view_block_save($delta = '', $edit = array()){
     if($delta === 'timelinejs_view_'.$i){
       variable_set('timelinejs_view_headline_'.$i, $edit['timelinejs_view_headline_'.$i]);
       variable_set('timelinejs_view_intro_'.$i, $edit['timelinejs_view_intro_'.$i]);
+      variable_set('timelinejs_view_title_image_'.$i, $edit['timelinejs_view_title_image_'.$i]);
       variable_set('timelinejs_view_width_'.$i, $edit['timelinejs_view_width_'.$i]);
       variable_set('timelinejs_view_height_'.$i, $edit['timelinejs_view_height_'.$i]);
       variable_set('timelinejs_view_dates_'.$i, $edit['timelinejs_view_dates_'.$i]);

@@ -40,14 +40,14 @@ function timelinejs_view_block_configure($delta){
   $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_view_'.$i){
-      $intro = variable_get('timelinejs_view_intro_'.$i, '');
-      if($intro != '') $intro = $intro['value'];
+      $intro = variable_get('timelinejs_view_intro_'.$i, array('value'=>''));
+      $intro = $intro['value'];
       $form['timelinejs_view_title_slider'] = array(
         '#type' => 'fieldset',
         '#title' => t('Title Page Configuration'),
-        '#weight' => 0,
+        '#weight' => 10,
         '#collapsible' => TRUE,
-        '#collapsed' => FALSE
+        '#collapsed' => TRUE 
       );
       $form['timelinejs_view_title_slider']['timelinejs_view_headline_'.$i] = array(
         '#type' => 'textfield',
@@ -98,9 +98,9 @@ function timelinejs_view_block_configure($delta){
       $form['timelinejs_view_display'] = array(
         '#type' => 'fieldset',
         '#title' => t('Display Configuration'),
-        '#weight' => 0,
+        '#weight' => 20,
         '#collapsible' => TRUE,
-        '#collapsed' => FALSE
+        '#collapsed' => TRUE 
       );
       $form['timelinejs_view_display']['timelinejs_view_width_'.$i] = array(
         '#type' => 'textfield',
@@ -118,14 +118,28 @@ function timelinejs_view_block_configure($delta){
         '#default_value' => variable_get('timelinejs_view_height_'.$i, '600'),
         '#required' => TRUE,
       );
-      $form['timelinejs_view_dates_'.$i] = array(
+      $form['timelinejs_view_dates'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Select Dates for Timeline'),
+        '#weight' => 0,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE
+      );
+      $form['timelinejs_view_dates']['timelinejs_view_dates_'.$i] = array(
         '#type' => 'checkboxes',
         '#title' => t('Select the date nodes to appear on the timeline'),
         '#options' => $date_options,
         '#default_value' => variable_get('timelinejs_view_dates_'.$i, array()),
         '#required' => TRUE
       );
-      $form['timelinejs_view_era_'.$i] = array(
+      $form['timelinejs_view_era'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Select Eras for Timeline'),
+        '#weight' => 15,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE
+      );
+      $form['timelinejs_view_era']['timelinejs_view_era_'.$i] = array(
         '#type' => 'checkboxes',
         '#title' => t('Select the eras to appear on the timeline'),
         '#options' => $era_options,

@@ -62,6 +62,10 @@ function _timelinejs_view_dates_generator($block_id) {
     $entry->endDate = date('Y,m,d', strtotime($date->field_dates['und'][0]['value2']));
     $entry->headline = $date->title;
     $entry->text = $date->body['und'][0]['safe_value'];
+    if(isset($date->field_read_more['und'][0]['value'])){
+      $readmore = '<p><a href="'.$date->field_read_more['und'][0]['value'].'" title="Read More">Read More</a></p>';
+      $entry->text .= $readmore;
+    }
     $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
     $entry->text = addslashes($entry->text);
     if(isset($date->field_timeline_category['und'][0]['tid'])){

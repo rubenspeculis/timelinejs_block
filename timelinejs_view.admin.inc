@@ -51,5 +51,8 @@ function timelinejs_view_config_form($form, &$form_state){
     '#options' => $font,
     '#required' => TRUE
   );
+  $form['general_settings']['timelinejs_view_fonts'] = array(
+    '#markup' => '<img src="/'.drupal_get_path('module', 'timelinejs_view').'/img/fonts.png" alt="Fonts available" />',
+  );
   return system_settings_form($form);
 }

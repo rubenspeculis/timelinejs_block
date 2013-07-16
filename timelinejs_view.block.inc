@@ -27,15 +27,17 @@ function timelinejs_view_block_configure($delta){
     'title' => array('data' => t('Title'), 'field' => 'n.title'),
     'startDate' => array('data' => t('Start Date'), 'field' => 'd.field_dates_value'),
     'endDate' => array('data' => t('End Date'), 'field' => 'd.field_dates_value2'),
-    'type' => array('data' => t('Type') , 'field' => 'n.type'),
+    'category' => array('data' => t('Category') , 'field' => 'c.field_timeline_category_tid'),
     'status' => array('data' => t('Status'), 'field' => 'n.status'),
   );
   $query = db_select('node', 'n');
   $query->join('field_data_field_dates', 'd', 'n.nid = d.entity_id');
+  $query->join('field_data_field_timeline_category', 'c', 'n.nid = c.entity_id');
   $dates_nids = $query
     ->fields('n', array('nid'))
     ->fields('d', array('field_dates_value'))
     ->fields('d', array('field_dates_value2'))
+    ->fields('c', array('field_timeline_category_tid'))
     ->extend('TableSort')
     ->orderByHeader($header_dates)
     ->execute()
@@ -53,17 +55,45 @@ function timelinejs_view_block_configure($delta){
       ),
       'startDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value'])),
       'endDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value2'])),
-      'type' => check_plain(node_type_get_name($date)),
+      'category' => taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name,
       'status' => $date->status ? t('Published') : t('Not Published'),
     );
   }
 
   $dates_checked = array();
 
-  $era_nodes = node_load_multiple(array(), array('type' => 'timelinejs_era'));
+  $header_eras = array(
+    'e_title' => array('data' => t('Era Title'), 'field' => 'ne.title'),
+    'e_startDate' => array('data' => t('Era Start Date'), 'field' => 'de.field_dates_value'),
+    'e_endDate' => array('data' => t('Era End Date'), 'field' => 'de.field_dates_value2'),
+    'e_status' => array('data' => t('Era Status'), 'field' => 'ne.status'),
+  );
+  $query = db_select('node', 'ne');
+  $query->join('field_data_field_dates', 'de', 'ne.nid = de.entity_id');
+  $eras_nids = $query
+    ->fields('ne', array('nid'))
+    ->fields('de', array('field_dates_value'))
+    ->fields('de', array('field_dates_value2'))
+    ->extend('TableSort')
+    ->orderByHeader($header_eras)
+    ->execute()
+    ->fetchCol();
+
+  $era_nodes = node_load_multiple($eras_nids, array('type' => 'timelinejs_era'));
   $era_oprions = array();
   foreach($era_nodes as $era){
-    $era_options[$era->nid] = $era->title;
+    $era_options[$era->nid] = array(
+      'e_title' => array(
+        'data' => array(
+          '#type' => 'link',
+          '#title' => $era->title,
+          '#href' => 'node/'.$era->nid,
+        )
+      ),
+      'e_startDate' => date('Y-m-d', strtotime($era->field_dates['und'][0]['value'])),
+      'e_endDate' => date('Y-m-d', strtotime($era->field_dates['und'][0]['value2'])),
+      'e_status' => $era->status ? t('Published') : t('Not Published'),
+    );
   }
 
   $number_of_blocks = variable_get('timelinejs_view_number_of_blocks', '2');
@@ -171,9 +201,11 @@ function timelinejs_view_block_configure($delta){
         '#collapsed' => TRUE
       );
       $form['timelinejs_view_era']['timelinejs_view_era_'.$i] = array(
-        '#type' => 'checkboxes',
+        '#type' => 'tableselect',
         '#title' => t('Select the eras to appear on the timeline'),
+        '#header' => $header_eras,
         '#options' => $era_options,
+        '#empty' => t('No Content available'),
         '#default_value' => variable_get('timelinejs_view_era_'.$i, array())
       );
     }

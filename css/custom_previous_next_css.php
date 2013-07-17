@@ -9,6 +9,10 @@ echo <<<END
 .block-timelinejs-block .nav-next,
 .block-timelinejs-block .nav-previous {
   background-color: $bg_color;
-  color: $font_color;
+  color: $bg_color !Important;
+}
+.block-timelinejs-block .nav-next:hover,
+.block-timelinejs-block .nav-previous:hover {
+  color: $font_color !Important;
 }
 END;

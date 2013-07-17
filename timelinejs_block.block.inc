@@ -177,14 +177,14 @@ function timelinejs_block_block_configure($delta){
         '#default_value' => variable_get('timelinejs_block_height_'.$i, '600'),
         '#required' => TRUE,
       );
-      $form['timelinejs_block_display']['timelinejs_block_previous_next_bg'.$i] = array(
+      $form['timelinejs_block_display']['timelinejs_block_previous_next_bg_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Background Color for Previous/Next regions'),
         '#size' => 30,
         '#default_value' => variable_get('timelinejs_block_previous_next_bg_'.$i, '#fff'),
         '#required' => TRUE,
       );
-      $form['timelinejs_block_display']['timelinejs_block_previous_next_font'.$i] = array(
+      $form['timelinejs_block_display']['timelinejs_block_previous_next_font_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Font Color for Previous/Next regions'),
         '#size' => 30,
@@ -312,7 +312,12 @@ function timelinejs_block_block_content($identifier = 1) {
   $height = str_replace('px', '', $height);
   $font = variable_get('timelinejs_block_font_select', 'Arvo-PTSans');
   $start_zoom = variable_get('timelinejs_block_start_zoom_'.$identifier, '0');
+  $previous_next_bg = urlencode(variable_get('timelinejs_block_previous_next_bg_'.$identifier, '#fff'));
+  $previous_next_font = urlencode(variable_get('timelinejs_block_previous_next_font_'.$identifier, '#ddd'));
+  $previous_next_css_path = drupal_get_path('module', 'timelinejs_block').'/css/custom_previous_next_css.php?bg='.$previous_next_bg.'&font='.$previous_next_font;
+
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
+    echo '<link rel="stylesheet" type="text/css" media="all" href="/'.$previous_next_css_path.'">';
     if($font=='other'){
       $font1 = urlencode(variable_get('timelinejs_block_font2'));
       $font2 = urlencode(variable_get('timelinejs_block_font1'));

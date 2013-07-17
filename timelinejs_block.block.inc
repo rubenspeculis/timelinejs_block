@@ -191,6 +191,28 @@ function timelinejs_block_block_configure($delta){
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
+      $form['timelinejs_block_display']['timelinejs_block_start_zoom_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Set start zoom level'),
+        '#size' => 60,
+        '#description' => t('Select the starting zoom level for the timeline. Negative numbers zoom out.'),
+        '#default_value' => variable_get('timelinejs_block_start_zoom_'.$i, '0'),
+        '#options' => array(
+          '-5' => t('-5'),
+          '-4' => t('-4'),
+          '-3' => t('-3'),
+          '-2' => t('-2'),
+          '-1' => t('-1'),
+          '0' => t('0 - Default'),
+          '1' => t('1'),
+          '2' => t('2'),
+          '3' => t('3'),
+          '4' => t('4'),
+          '5' => t('5'),
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
       $form['timelinejs_block_dates'] = array(
         '#type' => 'fieldset',
         '#title' => t('Select Dates for Timeline'),
@@ -243,6 +265,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_width_'.$i, $edit['timelinejs_block_width_'.$i]);
       variable_set('timelinejs_block_height_'.$i, $edit['timelinejs_block_height_'.$i]);
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
+      variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
     }
@@ -272,6 +295,7 @@ function timelinejs_block_block_content($identifier = 1) {
   $height = variable_get('timelinejs_block_height_'.$identifier, '600');
   $height = str_replace('px', '', $height);
   $font = variable_get('timelinejs_block_font_select', 'Arvo-PTSans');
+  $start_zoom = variable_get('timelinejs_block_start_zoom_'.$identifier, '0');
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     if($font=='other'){
       $font1 = urlencode(variable_get('timelinejs_block_font2'));
@@ -284,6 +308,7 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "\ttype: 'timeline',\n";
     $content .= "\twidth: '$width', height: '$height',\n";
     $content .= "\tsource: '/json/$identifier',\n";
+    $content .= "\tstart_zoom_adjust: '$start_zoom',\n";
     if($font!='other'){
       $content .= "\tfont: '$font',\n";
     }

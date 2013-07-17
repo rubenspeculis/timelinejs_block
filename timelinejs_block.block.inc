@@ -1,8 +1,10 @@
 <?php
 /**
  * @file
- * Implements various block hooks
+ * Implements various block hooks.
  */
+
+require_once( dirname(__FILE__) . '/timelinejs_block.functions.inc');
 
 /**
  * Implement hook_block_info().
@@ -337,6 +339,10 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "})\n";
     $content .= '</script>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
+    $table = _timelinejs_block_table_generator($identifier);
+    $content .= '<div id="timeline_table_'.$identifier.'" class="timelinejs_table">';
+    $content .= $table;
+    $content .= '</div>';
     return $content;
     }
   else {

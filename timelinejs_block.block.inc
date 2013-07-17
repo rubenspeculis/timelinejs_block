@@ -273,12 +273,20 @@ function timelinejs_block_block_content($identifier = 1) {
   $height = str_replace('px', '', $height);
   $font = variable_get('timelinejs_block_font_select', 'Arvo-PTSans');
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
+    if($font=='other'){
+      $font1 = urlencode(variable_get('timelinejs_block_font2'));
+      $font2 = urlencode(variable_get('timelinejs_block_font1'));
+      $path = drupal_get_path('module', 'timelinejs_block').'/css/custom_fonts_css.php?font1='.$font1.'&font2='.$font2;
+      echo '<link rel="stylesheet" type="text/css" media="all" href="/'.$path.'">';
+    }
     $content = "<script>jQuery(document).ready(function() {\n";
     $content .= 'createStoryJS({'."\n";
     $content .= "\ttype: 'timeline',\n";
     $content .= "\twidth: '$width', height: '$height',\n";
     $content .= "\tsource: '/json/$identifier',\n";
-    $content .= "\tfont: '$font',\n";
+    if($font!='other'){
+      $content .= "\tfont: '$font',\n";
+    }
     $content .= "\tembed_id: 'timeline_$identifier'});\n";
     $content .= "})\n";
     $content .= '</script>';

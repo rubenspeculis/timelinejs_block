@@ -1,9 +1,9 @@
 <?php
 
 // Load the Library and Requirement Hooks
-require_once ( dirname(__FILE__) . '/timelinejs_block.library.inc');
+require_once ( dirname(__FILE__) . '/timelinejs_block.library.inc' );
 // Load Block hooks
-require_once ( dirname(__FILE__) . '/timelinejs_block.block.inc');
+require_once ( dirname(__FILE__) . '/timelinejs_block.block.inc' );
 
 /**
  * Implement hook_menu().
@@ -28,5 +28,3 @@ function timelinejs_block_menu() {
   );
   return $items;
 }
-
-

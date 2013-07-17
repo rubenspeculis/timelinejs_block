@@ -26,7 +26,8 @@ function timelinejs_block_config_form($form, &$form_state){
     'Bevan-PotanoSans' => 'Bevan and Potano Sans',
     'BreeSerif-OpenSans' => 'Bree Serif and Open Sans',
     'SansitaOne-Kameron' => 'Sansita One and Kameron',
-    'Pacifico-Arimo' => 'Pacifico and Arimo'
+    'Pacifico-Arimo' => 'Pacifico and Arimo',
+    'other' => 'Other, please specify Font Pair in the fields below'
   );
   $locale = array(
     "af" => "Afrikaans",
@@ -93,6 +94,18 @@ function timelinejs_block_config_form($form, &$form_state){
     '#description' => t('Please specify the font pair you choose to use'),
     '#options' => $font,
     '#required' => TRUE
+  );
+  $form['general_settings']['timelinejs_block_font2'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Slider Headline and body Font Family'),
+    '#default_value' => variable_get('timelinejs_block_font2', 'Verdana'),
+    '#description' => t('If "Other" selected above, please type in the name of the font for the headling and body text here'),
+  );
+  $form['general_settings']['timelinejs_block_font1'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Captions, Credit and Dates Font Family'),
+    '#default_value' => variable_get('timelinejs_block_font1', 'Arial'),
+    '#description' => t('If "Other" selected above, please type in the name of the other fonts here'),
   );
   $form['general_settings']['timelinejs_block_fonts'] = array(
     '#markup' => '<img src="/'.drupal_get_path('module', 'timelinejs_block').'/img/fonts.png" alt="Fonts available" />',

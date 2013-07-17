@@ -1,5 +1,0 @@
-name = TimelineJS View
-description = Create blocks using TimelineJS.
-package = Visualisation
-core = 7.x
-dependencies[] = libraries

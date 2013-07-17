@@ -28,3 +28,14 @@ function timelinejs_block_menu() {
   );
   return $items;
 }
+
+/**
+ * Implement hook_init().
+ */
+function timelinejs_block_init(){
+  // Send X-UA-Compatible HTTP header to force IE to use the most recent
+  // rendering engine or use Chrome's frame rendering engine if available.
+  if (is_null(drupal_get_http_header('X-UA-Compatible'))) {
+    drupal_add_http_header('X-UA-Compatible', 'IE=edge,chrome=1');
+  }
+}

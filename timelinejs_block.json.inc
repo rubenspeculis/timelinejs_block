@@ -68,8 +68,22 @@ function _timelinejs_block_dates_generator($block_id) {
     $adjustedStart = date_format($startDate, 'U') + date_offset_get($startDate);
     $adjustedEnd = date_format($endDate, 'U') + date_offset_get($endDate);
 
-    $entry->startDate = date('Y,m,d', $adjustedStart);
-    $entry->endDate = date('Y,m,d', $adjustedEnd);
+    $granularity = variable_get('timelinejs_block_granularity_'.$block_id, 'ymd');
+
+    switch ($granularity) {
+      case 'ymd':
+        $format = 'Y,m,d';
+        break;
+      case 'ym':
+        $format = 'Y,m';
+        break;
+      case 'y':
+        $format = 'Y';
+        break;
+    }
+
+    $entry->startDate = date($format, $adjustedStart);
+    $entry->endDate = date($format, $adjustedEnd);
     $entry->headline = $date->title;
     $entry->text = $date->body['und'][0]['safe_value'];
     if(isset($date->field_read_more['und'][0]['value'])){

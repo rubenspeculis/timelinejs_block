@@ -82,6 +82,14 @@ function _timelinejs_block_sort($i, $j) {
   else return -1;
 }
 
+// Sort function NODES
+function _timelinejs_block_era_sort($i, $j) {
+  $a = $i['field_dates']['und'][0]['value'];
+  $b = $j['field_dates']['und'][0]['value'];
+  if ($a == $b) return 0;
+  if ($a > $b) return 1;
+  else return -1;
+}
 
 // Function to test if string is valid JSON
 function _timelinejs_block_isJson($string) {

@@ -85,7 +85,11 @@ function _timelinejs_block_dates_generator($block_id) {
     $entry->startDate = date($format, $adjustedStart);
     $entry->endDate = date($format, $adjustedEnd);
     $entry->headline = $date->title;
-    $entry->text = $date->body['und'][0]['safe_value'];
+    if(isset($date->body['und'][0]['safe_value'])){
+      $entry->text = $date->body['und'][0]['safe_value'];
+    } else {
+      $entry->text = "";
+    }
     if(isset($date->field_read_more['und'][0]['value'])){
       $readmore = '<p><a href="'.$date->field_read_more['und'][0]['value'].'" title="Read More">Read More</a></p>';
       $entry->text .= $readmore;
@@ -170,23 +174,54 @@ function _timelinejs_block_dates_generator($block_id) {
 
 function _timelinejs_block_era_generator($block_id) {
   $block_id_era = variable_get('timelinejs_block_era_'.$block_id);
-  if(!isset($block_id_era)){
-    $type = 'timelinejs_era';
-    $nodes = node_load_multiple(array(), array('type' => $type));
-  } else {
+
+  if(isset($block_id_era)){
     $nodes = node_load_multiple($block_id_era);
   }
+
   if(!empty($nodes)){ 
     $eraJson = ',"era":[';
+
+    foreach($nodes as $key => $era){
+      $nodes[$key] = (array)$era;
+    }
+
+    usort($nodes, "_timelinejs_block_era_sort");
+
+    $timezone = date_default_timezone();
+
     foreach($nodes as $era){
       $entry = new stdClass();
-      $entry->startDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value']));
-      $entry->endDate = date('Y,m,d', strtotime($era->field_dates['und'][0]['value2']));
-      $entry->headline = $era->title;
-      $entry->text = $era->body['und'][0]['safe_value'];
+      $startDate = date_create($era['field_dates']['und'][0]['value']);
+      $endDate = date_create($era['field_dates']['und'][0]['value2']);
+
+      date_timezone_set($startDate, timezone_open($timezone));
+      date_timezone_set($endDate, timezone_open($timezone));
+      $adjustedStart = date_format($startDate, 'U') + date_offset_get($startDate);
+      $adjustedEnd = date_format($endDate, 'U') + date_offset_get($endDate);
+
+      $granularity = variable_get('timelinejs_block_granularity_'.$block_id, 'ymd');
+
+      switch ($granularity) {
+        case 'ymd':
+          $format = 'Y,m,d';
+          break;
+        case 'ym':
+          $format = 'Y,m';
+          break;
+        case 'y':
+          $format = 'Y';
+          break;
+      }
+
+      $entry->startDate = date($format, $adjustedStart);
+      $entry->endDate = date($format, $adjustedEnd);
+
+      $entry->headline = $era['title'];
+      $entry->text = isset($era['body']['und'][0]['safe_value']) ? $era['body']['und'][0]['safe_value'] : "";
       $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
-      if(isset($era->field_timeline_category['und'][0]['tid'])){
-        $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
+      if(isset($era['field_timeline_category']['und'][0]['tid'])){
+        $entry->tag = taxonomy_term_load($era['field_timeline_category']['und'][0]['tid'])->name;
       }
 
       $eraJson .= '{"startDate":"' . $entry->startDate . '",';

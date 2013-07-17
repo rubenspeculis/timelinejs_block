@@ -82,7 +82,7 @@ function timelinejs_block_block_configure($delta){
     ->fetchCol();
 
   $era_nodes = node_load_multiple($eras_nids, array('type' => 'timelinejs_era'));
-  $era_oprions = array();
+  $era_options = array();
   foreach($era_nodes as $era){
     $era_options[$era->nid] = array(
       'e_title' => array(

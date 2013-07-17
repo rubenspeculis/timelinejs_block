@@ -179,6 +179,17 @@ function timelinejs_block_block_configure($delta){
         '#default_value' => variable_get('timelinejs_block_height_'.$i, '600'),
         '#required' => TRUE,
       );
+      $form['timelinejs_block_display']['timelinejs_block_access_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Do you want to show the table at the bottom of this block?'),
+        '#default_value' => variable_get('timelinejs_block_access_'.$i, '1'),
+        '#options' => array(
+          '1' => t('Yes'),
+          '0' => t('No')
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
       $form['timelinejs_block_display']['timelinejs_block_previous_next_bg_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Background Color for Previous/Next regions'),
@@ -283,6 +294,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_previous_next_bg_'.$i, $edit['timelinejs_block_previous_next_bg_'.$i]);
       variable_set('timelinejs_block_previous_next_font_'.$i, $edit['timelinejs_block_previous_next_font_'.$i]);
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
+      variable_set('timelinejs_block_access_'.$i, $edit['timelinejs_block_access_'.$i]);
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
@@ -317,7 +329,7 @@ function timelinejs_block_block_content($identifier = 1) {
   $previous_next_bg = urlencode(variable_get('timelinejs_block_previous_next_bg_'.$identifier, '#fff'));
   $previous_next_font = urlencode(variable_get('timelinejs_block_previous_next_font_'.$identifier, '#ddd'));
   $previous_next_css_path = drupal_get_path('module', 'timelinejs_block').'/css/custom_previous_next_css.php?bg='.$previous_next_bg.'&font='.$previous_next_font;
-
+  $access = variable_get('timelinejs_block_access_'.$identifier, '1');
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     echo '<link rel="stylesheet" type="text/css" media="all" href="/'.$previous_next_css_path.'">';
     if($font=='other'){
@@ -339,10 +351,12 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "})\n";
     $content .= '</script>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
-    $table = _timelinejs_block_table_generator($identifier);
-    $content .= '<div id="timeline_table_'.$identifier.'" class="timelinejs_table">';
-    $content .= $table;
-    $content .= '</div>';
+    if($access == 1) {
+      $table = _timelinejs_block_table_generator($identifier);
+      $content .= '<div id="timeline_table_'.$identifier.'" class="timelinejs_table">';
+      $content .= $table;
+      $content .= '</div>';
+    }
     return $content;
     }
   else {

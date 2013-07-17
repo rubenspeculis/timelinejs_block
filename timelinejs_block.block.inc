@@ -164,7 +164,7 @@ function timelinejs_block_block_configure($delta){
       $form['timelinejs_block_display']['timelinejs_block_width_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
-        '#size' => 60,
+        '#size' => 30,
         '#description' => t('Width of timeline. If using pixels then do not include the unit. If using percentage then do include the % symbol.'),
         '#default_value' => variable_get('timelinejs_block_width_'.$i, '100%'),
         '#required' => TRUE,
@@ -172,15 +172,28 @@ function timelinejs_block_block_configure($delta){
       $form['timelinejs_block_display']['timelinejs_block_height_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Width'),
-        '#size' => 60,
+        '#size' => 30,
         '#description' => t('Height of the timeline. As above.'),
         '#default_value' => variable_get('timelinejs_block_height_'.$i, '600'),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_block_display']['timelinejs_block_previous_next_bg'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Background Color for Previous/Next regions'),
+        '#size' => 30,
+        '#default_value' => variable_get('timelinejs_block_previous_next_bg_'.$i, '#fff'),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_block_display']['timelinejs_block_previous_next_font'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Font Color for Previous/Next regions'),
+        '#size' => 30,
+        '#default_value' => variable_get('timelinejs_block_previous_next_font_'.$i, '#333'),
         '#required' => TRUE,
       );
       $form['timelinejs_block_display']['timelinejs_block_granularity_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Select granularity'),
-        '#size' => 60,
         '#description' => t('Select Granularity of display, Year, Year and Month, Year, Month and Day'),
         '#default_value' => variable_get('timelinejs_block_granularity_'.$i, 'ymd'),
         '#options' => array(
@@ -194,7 +207,6 @@ function timelinejs_block_block_configure($delta){
       $form['timelinejs_block_display']['timelinejs_block_start_zoom_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Set start zoom level'),
-        '#size' => 60,
         '#description' => t('Select the starting zoom level for the timeline. Negative numbers zoom out.'),
         '#default_value' => variable_get('timelinejs_block_start_zoom_'.$i, '0'),
         '#options' => array(
@@ -210,6 +222,8 @@ function timelinejs_block_block_configure($delta){
           '4' => t('4'),
           '5' => t('5'),
         ),
+        '#empty_option' => t('Please make a selection'),
+        '#empty_option' => '0',
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
@@ -264,6 +278,8 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_title_image_credit_'.$i, $edit['timelinejs_block_title_image_credit_'.$i]);
       variable_set('timelinejs_block_width_'.$i, $edit['timelinejs_block_width_'.$i]);
       variable_set('timelinejs_block_height_'.$i, $edit['timelinejs_block_height_'.$i]);
+      variable_set('timelinejs_block_previous_next_bg_'.$i, $edit['timelinejs_block_previous_next_bg_'.$i]);
+      variable_set('timelinejs_block_previous_next_font_'.$i, $edit['timelinejs_block_previous_next_font_'.$i]);
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);

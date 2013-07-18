@@ -4,6 +4,7 @@ This module creates blocks using the TimelineJS javascript library.
 
 ##Installation
 To install:
+
 1. Enable TimelineJS Content Types.
 2. Enable TimelineJS Block.
 3. Download TimelineJS library from https://github.com/VeriteCo/TimelineJS and save it to /sites/all/libraries/ so that timeline.js can be found at /sites/all/libraries/TimelineJS/compiled/js/

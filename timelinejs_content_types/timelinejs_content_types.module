@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the TimelineJS Content Types feature.
+ */
+
+include_once 'timelinejs_content_types.features.inc';

@@ -25,78 +25,13 @@ function timelinejs_block_block_info(){
 function timelinejs_block_block_configure($delta){
   $form = array();
 
-  $header_dates = array(
-    'title' => array('data' => t('Title'), 'field' => 'n.title'),
-    'startDate' => array('data' => t('Start Date'), 'field' => 'd.field_dates_value'),
-    'endDate' => array('data' => t('End Date'), 'field' => 'd.field_dates_value2'),
-    'category' => array('data' => t('Category') , 'field' => 'c.field_timeline_category_tid'),
-    'status' => array('data' => t('Status'), 'field' => 'n.status'),
-  );
-  $query = db_select('node', 'n');
-  $query->join('field_data_field_dates', 'd', 'n.nid = d.entity_id');
-  $query->join('field_data_field_timeline_category', 'c', 'n.nid = c.entity_id');
-  $dates_nids = $query
-    ->fields('n', array('nid'))
-    ->fields('d', array('field_dates_value'))
-    ->fields('d', array('field_dates_value2'))
-    ->fields('c', array('field_timeline_category_tid'))
-    ->extend('TableSort')
-    ->orderByHeader($header_dates)
-    ->execute()
-    ->fetchCol();
-  $date_nodes = node_load_multiple($dates_nids,array('type' => 'timelinejs_dates'));
-  $date_options = array();
-  foreach($date_nodes as $date){
-    $date_options[$date->nid] = array(
-      'title' => array(
-        'data' => array(
-          '#type' => 'link',
-          '#title' => $date->title,
-          '#href' => 'node/'.$date->nid,
-        )
-      ),
-      'startDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value'])),
-      'endDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value2'])),
-      'category' => taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name,
-      'status' => $date->status ? t('Published') : t('Not Published'),
-    );
-  }
+  $date_results = _timelinejs_block_block_config_dates_options();
+  $header_dates = $date_results['header_dates'];
+  $date_options = $date_results['date_options'];
 
-  $dates_checked = array();
-
-  $header_eras = array(
-    'e_title' => array('data' => t('Era Title'), 'field' => 'ne.title'),
-    'e_startDate' => array('data' => t('Era Start Date'), 'field' => 'de.field_dates_value'),
-    'e_endDate' => array('data' => t('Era End Date'), 'field' => 'de.field_dates_value2'),
-    'e_status' => array('data' => t('Era Status'), 'field' => 'ne.status'),
-  );
-  $query = db_select('node', 'ne');
-  $query->join('field_data_field_dates', 'de', 'ne.nid = de.entity_id');
-  $eras_nids = $query
-    ->fields('ne', array('nid'))
-    ->fields('de', array('field_dates_value'))
-    ->fields('de', array('field_dates_value2'))
-    ->extend('TableSort')
-    ->orderByHeader($header_eras)
-    ->execute()
-    ->fetchCol();
-
-  $era_nodes = node_load_multiple($eras_nids, array('type' => 'timelinejs_era'));
-  $era_options = array();
-  foreach($era_nodes as $era){
-    $era_options[$era->nid] = array(
-      'e_title' => array(
-        'data' => array(
-          '#type' => 'link',
-          '#title' => $era->title,
-          '#href' => 'node/'.$era->nid,
-        )
-      ),
-      'e_startDate' => date('Y-m-d', strtotime($era->field_dates['und'][0]['value'])),
-      'e_endDate' => date('Y-m-d', strtotime($era->field_dates['und'][0]['value2'])),
-      'e_status' => $era->status ? t('Published') : t('Not Published'),
-    );
-  }
+  $era_results = _timelinejs_block_block_config_era_options();
+  $header_eras = $era_results['header'];
+  $era_options = $era_results['era_options'];
 
   $number_of_blocks = variable_get('timelinejs_block_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){

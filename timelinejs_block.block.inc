@@ -228,6 +228,29 @@ function timelinejs_block_block_configure($delta){
         '#required' => TRUE,
       );
 
+      // Set Category colors
+      $form['timelinejs_block_display']['timelinejs_block_cat_odd_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Color for Odd Categories'),
+        '#size' => 30,
+        '#default_value' => variable_get('timelinejs_block_cat_odd_'.$i, '#ddd'),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_block_display']['timelinejs_block_cat_even_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Color for Even Categories'),
+        '#size' => 30,
+        '#default_value' => variable_get('timelinejs_block_cat_even_'.$i, '#999'),
+        '#required' => TRUE,
+      );
+      $form['timelinejs_block_display']['timelinejs_block_cat_font_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Font Color for Categories'),
+        '#size' => 30,
+        '#default_value' => variable_get('timelinejs_block_cat_font_'.$i, '#333'),
+        '#required' => TRUE,
+      );
+
     }
   }
   return $form;
@@ -240,6 +263,8 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
   $number_of_blocks = variable_get('timelinejs_block_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_block_'.$i){
+      variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
+      variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
       variable_set('timelinejs_block_headline_'.$i, $edit['timelinejs_block_headline_'.$i]);
       variable_set('timelinejs_block_intro_'.$i, $edit['timelinejs_block_intro_'.$i]);
       variable_set('timelinejs_block_title_image_'.$i, $edit['timelinejs_block_title_image_'.$i]);
@@ -253,8 +278,9 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
       variable_set('timelinejs_block_access_'.$i, $edit['timelinejs_block_access_'.$i]);
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
-      variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
-      variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
+      variable_set('timelinejs_block_cat_odd_'.$i, $edit['timelinejs_block_cat_odd_'.$i]);
+      variable_set('timelinejs_block_cat_even_'.$i, $edit['timelinejs_block_cat_even_'.$i]);
+      variable_set('timelinejs_block_cat_font_'.$i, $edit['timelinejs_block_cat_font_'.$i]);
       _timelinejs_block_era_css_save($i, $edit);
     }
   }

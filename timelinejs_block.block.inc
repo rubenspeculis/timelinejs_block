@@ -36,11 +36,34 @@ function timelinejs_block_block_configure($delta){
   $number_of_blocks = variable_get('timelinejs_block_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_block_'.$i){
+    
+      // Creates the Date table selector options
+      $form['timelinejs_block_dates'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Select Dates for Timeline'),
+        '#weight' => 0,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE
+      );
+      $form['timelinejs_block_dates']['timelinejs_block_dates_'.$i] = array(
+        '#type' => 'tableselect',
+        '#title' => t('Select the date nodes to appear on the timeline'),
+        '#header' => $header_dates,
+        '#options' => $date_options,
+        '#empty' => t('No Content available'),
+        '#default_value' => variable_get('timelinejs_block_dates_'.$i, array()),
+        '#required' => TRUE
+      );
+
+      // Form setup for Introduction Slider
+
+      // Grab default value for introduction text
       $intro = variable_get('timelinejs_block_intro_'.$i, array('value'=>''));
       $intro = $intro['value'];
+
       $form['timelinejs_block_title_slider'] = array(
         '#type' => 'fieldset',
-        '#title' => t('Title Page Configuration'),
+        '#title' => t('Title Slider Configuration'),
         '#weight' => 10,
         '#collapsible' => TRUE,
         '#collapsed' => TRUE 
@@ -91,6 +114,25 @@ function timelinejs_block_block_configure($delta){
         '#description' => t('Caption for title image.'),
         '#default_value' => variable_get('timelinejs_block_title_image_caption_'.$i, ''),
       );
+
+      // Creates the ERA select options
+      $form['timelinejs_block_era'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Select Eras for Timeline'),
+        '#weight' => 15,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE
+      );
+      $form['timelinejs_block_era']['timelinejs_block_era_'.$i] = array(
+        '#type' => 'tableselect',
+        '#title' => t('Select the eras to appear on the timeline'),
+        '#header' => $header_eras,
+        '#options' => $era_options,
+        '#empty' => t('No Content available'),
+        '#default_value' => variable_get('timelinejs_block_era_'.$i, array())
+      );
+
+      // Form Setup for Block level display configuration
       $form['timelinejs_block_display'] = array(
         '#type' => 'fieldset',
         '#title' => t('Display Configuration'),
@@ -108,12 +150,14 @@ function timelinejs_block_block_configure($delta){
       );
       $form['timelinejs_block_display']['timelinejs_block_height_'.$i] = array(
         '#type' => 'textfield',
-        '#title' => t('Width'),
+        '#title' => t('Height'),
         '#size' => 30,
         '#description' => t('Height of the timeline. As above.'),
         '#default_value' => variable_get('timelinejs_block_height_'.$i, '600'),
         '#required' => TRUE,
       );
+
+      // Display Assecibility table
       $form['timelinejs_block_display']['timelinejs_block_access_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Do you want to show the table at the bottom of this block?'),
@@ -125,6 +169,8 @@ function timelinejs_block_block_configure($delta){
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
+
+      // CSS Configuration for next and previous regions
       $form['timelinejs_block_display']['timelinejs_block_previous_next_bg_'.$i] = array(
         '#type' => 'textfield',
         '#title' => t('Background Color for Previous/Next regions'),
@@ -139,6 +185,8 @@ function timelinejs_block_block_configure($delta){
         '#default_value' => variable_get('timelinejs_block_previous_next_font_'.$i, '#333'),
         '#required' => TRUE,
       );
+
+      // Configures whether to show Y, Y and M or Y, M and D
       $form['timelinejs_block_display']['timelinejs_block_granularity_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Select granularity'),
@@ -152,6 +200,8 @@ function timelinejs_block_block_configure($delta){
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
+
+      // Set starting level ZOOM
       $form['timelinejs_block_display']['timelinejs_block_start_zoom_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Set start zoom level'),
@@ -170,42 +220,10 @@ function timelinejs_block_block_configure($delta){
           '4' => t('4'),
           '5' => t('5'),
         ),
-        '#empty_option' => t('Please make a selection'),
-        '#empty_option' => '0',
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
-      $form['timelinejs_block_dates'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Select Dates for Timeline'),
-        '#weight' => 0,
-        '#collapsible' => TRUE,
-        '#collapsed' => FALSE
-      );
-      $form['timelinejs_block_dates']['timelinejs_block_dates_'.$i] = array(
-        '#type' => 'tableselect',
-        '#title' => t('Select the date nodes to appear on the timeline'),
-        '#header' => $header_dates,
-        '#options' => $date_options,
-        '#empty' => t('No Content available'),
-        '#default_value' => variable_get('timelinejs_block_dates_'.$i, array()),
-        '#required' => TRUE
-      );
-      $form['timelinejs_block_era'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Select Eras for Timeline'),
-        '#weight' => 15,
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE
-      );
-      $form['timelinejs_block_era']['timelinejs_block_era_'.$i] = array(
-        '#type' => 'tableselect',
-        '#title' => t('Select the eras to appear on the timeline'),
-        '#header' => $header_eras,
-        '#options' => $era_options,
-        '#empty' => t('No Content available'),
-        '#default_value' => variable_get('timelinejs_block_era_'.$i, array())
-      );
+
     }
   }
   return $form;

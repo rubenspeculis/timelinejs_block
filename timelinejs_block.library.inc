@@ -16,7 +16,7 @@ function timelinejs_block_libraries_info() {
     'version arguments' => array(
       'file' => 'compiled/js/timeline.js',
       'pattern' => '/Version (\d.\d+)/',
-      'lines' => 3,
+      'lines' => 50,
     ),
     'path' => 'compiled',
     'files' => array(

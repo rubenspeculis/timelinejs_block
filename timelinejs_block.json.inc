@@ -101,6 +101,7 @@ function _timelinejs_block_dates_generator($block_id) {
     }
     if(isset($date->field_media['und'][0]['fid'])){
       $image = file_load($date->field_media['und'][0]['fid']); 
+      $entry->asset = new stdclass();
       $entry->asset->media = file_create_url($image->uri);
       $entry->asset->thumbnail = image_style_url('timelinejs_thumb', $image->uri);
     }

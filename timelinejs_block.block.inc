@@ -284,12 +284,36 @@ function timelinejs_block_block_content($identifier = 1) {
   $height = str_replace('px', '', $height);
   $font = variable_get('timelinejs_block_font_select', 'Arvo-PTSans');
   $start_zoom = variable_get('timelinejs_block_start_zoom_'.$identifier, '0');
+
   $previous_next_bg = urlencode(variable_get('timelinejs_block_previous_next_bg_'.$identifier, '#fff'));
   $previous_next_font = urlencode(variable_get('timelinejs_block_previous_next_font_'.$identifier, '#ddd'));
   $previous_next_css_path = drupal_get_path('module', 'timelinejs_block').'/css/custom_previous_next_css.php?bg='.$previous_next_bg.'&font='.$previous_next_font;
+
   $access = variable_get('timelinejs_block_access_'.$identifier, '1');
+
+  $eras = variable_get('timelinejs_block_era_'.$identifier); 
+  $eras = array_filter($eras);
+  if(!empty($eras)) {
+    $era_count = count($eras);
+    $era_css = array();
+    for($i=1; $i<=$era_count; $i++){
+      $color = variable_get('timelinejs_block_era_'.$i.'_css_'.$identifier);
+      if(isset($color)){
+        $era_css['era'.$i] = $color;
+      }
+    }
+  }
+
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     echo '<link rel="stylesheet" type="text/css" media="all" href="/'.$previous_next_css_path.'">';
+    if(!empty($era_css)){
+      $era_css_parameters = '?';
+      foreach($era_css as $class => $color){
+        $era_css_parameters .= $class .'='. urlencode($color).'&';
+      }
+      $era_css_path = '/'.drupal_get_path('module', 'timelinejs_block').'/css/custom_era_css.php'.$era_css_parameters;
+      echo '<link rel="stylesheet" type="text/css" media="all" href="'.$era_css_path.'">';
+    }
     if($font=='other'){
       $font1 = urlencode(variable_get('timelinejs_block_font2'));
       $font2 = urlencode(variable_get('timelinejs_block_font1'));

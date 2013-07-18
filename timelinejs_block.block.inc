@@ -131,6 +131,10 @@ function timelinejs_block_block_configure($delta){
         '#empty' => t('No Content available'),
         '#default_value' => variable_get('timelinejs_block_era_'.$i, array())
       );
+      $eras = variable_get('timelinejs_block_era_'.$i, array());
+      $era_count = count(array_filter(array_values($eras)));
+
+      $form['timelinejs_block_era'][] = _timelinejs_block_era_css_fields($era_count, $i); 
 
       // Form Setup for Block level display configuration
       $form['timelinejs_block_display'] = array(
@@ -251,6 +255,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
+      _timelinejs_block_era_css_save($i, $edit);
     }
   }
 }

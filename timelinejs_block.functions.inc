@@ -97,6 +97,7 @@ function _timelinejs_block_isJson($string) {
     return (json_last_error() == JSON_ERROR_NONE);
 }
 
+// Function to build tableselect era options in block config.
 function _timelinejs_block_block_config_era_options() {
 
   $header_eras = array(
@@ -139,6 +140,7 @@ function _timelinejs_block_block_config_era_options() {
   return $results;
 }
 
+// Function to build table select for dates in block config.
 function _timelinejs_block_block_config_dates_options() {
 
   $header_dates = array(
@@ -182,4 +184,34 @@ function _timelinejs_block_block_config_dates_options() {
     'date_options' => $date_options
   );
   return $results;
+}
+
+/**
+ * function to build era css fields dynamically.
+ */
+function _timelinejs_block_era_css_fields($number_of_eras_selected = 0, $block_id) {
+
+  for($i=1; $i<=$number_of_eras_selected; $i++) {
+    $form['timelinejs_block_era']['timelinejs_block_era_'.$i.'_css_'.$block_id] = array(
+      '#type' => 'textfield',
+      '#title' => 'Color for era '.$i,
+      '#size' => 30,
+      '#default_value' => variable_get('timelinejs_block_era_'.$i.'_css_'.$block_id, '#333333'),
+    );
+  }
+  if(isset($form['timelinejs_block_era'])){
+    return $form['timelinejs_block_era'];
+  }
+}
+
+function _timelinejs_block_era_css_save($block_id, $edit) {
+
+  $eras = variable_get('timelinejs_block_era_'.$block_id, array());
+  $era_count = count(array_filter(array_values($eras)));
+
+  for($i=1; $i<=$era_count; $i++) {
+    if(isset($edit['timelinejs_block_era_'.$i.'_css_'.$block_id])){
+      variable_set('timelinejs_block_era_'.$i.'_css_'.$block_id, $edit['timelinejs_block_era_'.$i.'_css_'.$block_id]);
+    }
+  }
 }

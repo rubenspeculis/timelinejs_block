@@ -330,8 +330,16 @@ function timelinejs_block_block_content($identifier = 1) {
     }
   }
 
+  $cat_odd_color = urlencode(variable_get('timelinejs_block_cat_odd_'.$identifier, '#ddd'));
+  $cat_even_color = urlencode(variable_get('timelinejs_block_cat_even_'.$identifier, '#999'));
+  $cat_font_color = urlencode(variable_get('timelinejs_block_catt_font_'.$identifier, '#333'));
+
+  $cat_color_css_path = '/'.drupal_get_path('module','timelinejs_block').'/css/custom_category_css.php?';
+  $cat_color_css_path .= 'oddcolor='.$cat_odd_color.'&evencolor='.$cat_even_color.'&catfontcolor='.$cat_font_color;
+
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     echo '<link rel="stylesheet" type="text/css" media="all" href="/'.$previous_next_css_path.'">';
+    echo '<link rel="stylesheet" type="text/css" media="all" href="'.$cat_color_css_path.'">';
     if(!empty($era_css)){
       $era_css_parameters = '?';
       foreach($era_css as $class => $color){

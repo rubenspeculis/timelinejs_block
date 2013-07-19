@@ -21,14 +21,14 @@ function _timelinejs_block_table_generator($block_id = '1') {
   $date_rows = '';
   foreach($dates as $date){
     $date_rows .= "<tr>";
-    $date_rows .= "<td>".$date['startDate']."</td>";
-    if(isset($date['tag'])){
-      $date_rows .= "<td>".$date['tag']."</td>";
+    $date_rows .= "<td>".$date->startDate."</td>";
+    if(isset($date->tag)){
+      $date_rows .= "<td>".$date->tag."</td>";
     } else {
       $date_rows .= "<td>&nbsp;</td>";
     }
-    $date_rows .= "<td>".$date['headline']."</td>";
-    $date_rows .= "<td>".addslashes($date['text'])."</td>";
+    $date_rows .= "<td>".$date->headline."</td>";
+    $date_rows .= "<td>".addslashes($date->text)."</td>";
     $date_rows .= "</tr>";
   }
 
@@ -61,13 +61,6 @@ function _timelinejs_block_table_json_parse($block_identifier = '1') {
   }
 
   $dates = $json->timeline->date;
-
-  // Convert objects to array for sorting with uasort();
-  foreach($dates as $key => $date) {
-    $dates[$key] = (array)$date;
-  }
-  usort($dates, "_timelinejs_block_sort");
-
   $results = array(
     'timeline' => $json->timeline,
     'dates' => $dates

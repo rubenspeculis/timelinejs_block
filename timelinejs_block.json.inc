@@ -41,15 +41,15 @@ function timelinejs_block_json($block_identifier = 1){
   }
   $timeline .= $dates;
   $timeline .= $era;
-  $timeline .= '}}'; 
+  $timeline .= '}}';
 
+  header('Content-Type: application/json');
   echo($timeline);
 }
 
 function _timelinejs_block_dates_generator($block_id) {
   $block_id_dates = variable_get('timelinejs_block_dates_'.$block_id);
   $timezone = date_default_timezone();
-
 
   if(empty($block_id_dates)){
     $query = new EntityFieldQuery();

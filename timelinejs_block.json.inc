@@ -145,8 +145,8 @@ function _timelinejs_block_dates_generator($block_id) {
 
     if(isset($entry->asset->media)){
       $dateJson .= ',"asset":{';
-      $dateJson .= '"media":"'.$entry->asset->media.'"';
-      $dateJson .= ',"thumbnail":"'.$entry->asset->thumbnail.'"';
+      $dateJson .= '"media":"'.$entry->asset->media.'",';
+      $dateJson .= '"thumbnail":"'.$entry->asset->thumbnail.'"';
 
       if(!isset($entry->asset->caption) && !isset($entry->asset->credit)){
         $dateJson .= '}';

@@ -49,11 +49,25 @@ function timelinejs_block_json($block_identifier = 1){
 function _timelinejs_block_dates_generator($block_id) {
   $block_id_dates = variable_get('timelinejs_block_dates_'.$block_id);
   $timezone = date_default_timezone();
-  if(!isset($block_id_dates)){
-    $type = 'timelinejs_dates';
-    $nodes = node_load_multiple(array(), array('type' => $type));
+
+
+  if(empty($block_id_dates)){
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'timelinejs_dates')
+      ->fieldOrderBy('field_dates', 'value', 'ASC')
+      ->execute();
+    $nids = array_keys($result['node']);
+    $nodes = node_load_multiple($nids);
   } else {
-    $nodes = node_load_multiple($block_id_dates);
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'timelinejs_dates')
+      ->entityCondition('entity_id', $block_id_dates, 'IN')
+      ->fieldOrderBy('field_dates', 'value', 'ASC')
+      ->execute();
+    $nids = array_keys($result['node']);
+    $nodes = node_load_multiple($nids);
   }
 
   $dateJson = '"date":[';
@@ -177,24 +191,25 @@ function _timelinejs_block_era_generator($block_id) {
   $block_id_era = variable_get('timelinejs_block_era_'.$block_id);
 
   if(isset($block_id_era)){
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'timelinejs_era')
+      ->entityCondition('entity_id', $block_id_era, 'IN')
+      ->fieldOrderBy('field_dates', 'value', 'ASC')
+      ->execute();
+    $nids = array_keys($result['node']);
     $nodes = node_load_multiple($block_id_era);
   }
 
   if(!empty($nodes)){ 
     $eraJson = ',"era":[';
 
-    foreach($nodes as $key => $era){
-      $nodes[$key] = (array)$era;
-    }
-
-    usort($nodes, "_timelinejs_block_era_sort");
-
     $timezone = date_default_timezone();
 
     foreach($nodes as $era){
       $entry = new stdClass();
-      $startDate = date_create($era['field_dates']['und'][0]['value']);
-      $endDate = date_create($era['field_dates']['und'][0]['value2']);
+      $startDate = date_create($era->field_dates['und'][0]['value']);
+      $endDate = date_create($era->field_dates['und'][0]['value2']);
 
       date_timezone_set($startDate, timezone_open($timezone));
       date_timezone_set($endDate, timezone_open($timezone));
@@ -218,11 +233,11 @@ function _timelinejs_block_era_generator($block_id) {
       $entry->startDate = date($format, $adjustedStart);
       $entry->endDate = date($format, $adjustedEnd);
 
-      $entry->headline = $era['title'];
-      $entry->text = isset($era['body']['und'][0]['safe_value']) ? $era['body']['und'][0]['safe_value'] : "";
+      $entry->headline = $era->title;
+      $entry->text = isset($era->body['und'][0]['safe_value']) ? $era->body['und'][0]['safe_value'] : "";
       $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
-      if(isset($era['field_timeline_category']['und'][0]['tid'])){
-        $entry->tag = taxonomy_term_load($era['field_timeline_category']['und'][0]['tid'])->name;
+      if(isset($era->field_timeline_category['und'][0]['tid'])){
+        $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
       }
 
       $eraJson .= '{"startDate":"' . $entry->startDate . '",';

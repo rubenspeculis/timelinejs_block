@@ -141,9 +141,9 @@ function timelinejs_content_types_field_default_field_instances() {
         'input_format_custom' => '',
         'label_position' => 'above',
         'text_parts' => array(),
-        'year_range' => '-10:+50',
+        'year_range' => '1700:+50',
       ),
-      'type' => 'date_popup',
+      'type' => 'date_select',
       'weight' => 4,
     ),
   );
@@ -435,6 +435,7 @@ function timelinejs_content_types_field_default_field_instances() {
   // Exported field_instance: 'node-timelinejs_era-field_dates'
   $field_instances['node-timelinejs_era-field_dates'] = array(
     'bundle' => 'timelinejs_era',
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -480,7 +481,7 @@ function timelinejs_content_types_field_default_field_instances() {
         'text_parts' => array(),
         'year_range' => '-10:+10',
       ),
-      'type' => 'date_popup',
+      'type' => 'date_select',
       'weight' => 33,
     ),
   );

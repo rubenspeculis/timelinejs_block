@@ -67,7 +67,7 @@ function _timelinejs_block_dates_generator($block_id) {
       ->fieldOrderBy('field_dates', 'value', 'ASC')
       ->execute();
     $nids = array_keys($result['node']);
-    $nodes = node_load_multiple($nids);
+    $nodes = node_load_multiple($block_id_dates);
   }
 
   $dateJson = '"date":[';

@@ -212,3 +212,45 @@ function _timelinejs_block_era_css_save($block_id, $edit) {
     }
   }
 }
+
+/**
+ * Cleanner
+ */
+
+function _ms_to_UTF8_convert($string) {
+  $search = array(
+    "\xe2\x80\x98",
+    "\xe2\x80\x99",
+    "\xe2\x80\x9c",
+    "\xe2\x80\x9d",
+    "\xe2\x80\x93",
+    "\xe2\x80\x94",
+    "\xe2\x80\xa6",
+    chr(145),
+    chr(146),
+    chr(147),
+    chr(148),
+    chr(150),
+    chr(151),
+    chr(133)
+  );
+  $replace = array(
+    "'",
+    "'",
+    '"',
+    '"',
+    '-',
+    '--',
+    '...',
+    "'",
+    "'",
+    '"',
+    '"',
+    '-',
+    '--',
+    '...'
+  );
+  $string = str_replace($search, $replace, $string);
+  $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+  return $string;
+}

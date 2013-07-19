@@ -6,11 +6,14 @@
  * Set the JSON feed
  */
 
+require_once( dirname(__FILE__) . '/timelinejs_block.functions.inc');
+
 function timelinejs_block_json($block_identifier = 1){
   $dates = _timelinejs_block_dates_generator((int)$block_identifier);
   $era =  _timelinejs_block_era_generator((int)$block_identifier);
   $headline = variable_get('timelinejs_block_headline_'.$block_identifier, 'This is a test');
   $intro = variable_get('timelinejs_block_intro_'.$block_identifier, '');
+  $intro = _ms_to_UTF8_convert($intro['value']);
   $intro = str_replace(array("\r\n", "\r", "\n"), "", $intro['value']);
   $intro = addslashes($intro);
   $media = variable_get('timelinejs_block_title_image_'.$block_identifier);
@@ -108,8 +111,9 @@ function _timelinejs_block_dates_generator($block_id) {
       $readmore = '<p><a href="'.$date->field_read_more['und'][0]['value'].'" title="Read More">Read More</a></p>';
       $entry->text .= $readmore;
     }
+    $entry->text = _ms_to_UTF8_convert($entry->text);
     $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
-    $entry->text = addslashes($entry->text);
+    $entry->text = json_encode($entry->text);
     if(isset($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
     }
@@ -134,7 +138,7 @@ function _timelinejs_block_dates_generator($block_id) {
     $dateJson .= '{"startDate":"' . $entry->startDate .'",';
     $dateJson .= '"endDate":"' . $entry->endDate .'",';
     $dateJson .= '"headline":"' . $entry->headline .'",';
-    $dateJson .= '"text":"' . $entry->text .'"';
+    $dateJson .= '"text":' . $entry->text ;
 
     if(isset($entry->tag)){
       $dateJson .= ',"tag":"' . $entry->tag .'"';
@@ -235,6 +239,7 @@ function _timelinejs_block_era_generator($block_id) {
 
       $entry->headline = $era->title;
       $entry->text = isset($era->body['und'][0]['safe_value']) ? $era->body['und'][0]['safe_value'] : "";
+      $entry->text = _ms_to_UTF8_convert($entry->text);
       $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
       if(isset($era->field_timeline_category['und'][0]['tid'])){
         $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;

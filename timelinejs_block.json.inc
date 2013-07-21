@@ -239,22 +239,22 @@ function _timelinejs_block_era_generator($block_id) {
           break;
       }
 
-      $entry->startDate = date($format, $adjustedStart);
-      $entry->endDate = date($format, $adjustedEnd);
+      $entry->startDate = json_encode(date($format, $adjustedStart));
+      $entry->endDate = json_encode(date($format, $adjustedEnd));
 
-      $entry->headline = $era->title;
+      $entry->headline = json_encode($era->title);
       $entry->text = isset($era->body['und'][0]['safe_value']) ? $era->body['und'][0]['safe_value'] : "";
       $entry->text = json_encode($entry->text);
       if(isset($era->field_timeline_category['und'][0]['tid'])){
-        $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
+        $entry->tag = json_encode(taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name);
       }
 
-      $eraJson .= '{"startDate":"' . $entry->startDate . '",';
-      $eraJson .= '"endDate":"' . $entry->endDate .'",';
-      $eraJson .= '"headline":"' . $entry->headline .'",';
+      $eraJson .= '{"startDate":' . $entry->startDate . ',';
+      $eraJson .= '"endDate":' . $entry->endDate .',';
+      $eraJson .= '"headline":' . $entry->headline .',';
       $eraJson .= '"text":' . $entry->text;
       if(isset($entry->tag)){
-        $eraJson .= ',"tag":"' . $entry->tag .'"';
+        $eraJson .= ',"tag":' . $entry->tag;
       }
 
       if($era === end($nodes)){

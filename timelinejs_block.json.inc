@@ -103,6 +103,7 @@ function _timelinejs_block_dates_generator($block_id) {
     $entry->startDate = json_encode(date($format, $adjustedStart));
     $entry->endDate = json_encode(date($format, $adjustedEnd));
     $entry->headline = json_encode($date->title);
+
     if(isset($date->body['und'][0]['safe_value'])){
       $entry->text = $date->body['und'][0]['safe_value'];
     } else {
@@ -113,26 +114,29 @@ function _timelinejs_block_dates_generator($block_id) {
       $entry->text .= $readmore;
     }
     $entry->text = json_encode($entry->text);
+
     if(!empty($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
+      $entry->tag = json_encode($entry->tag);
     }
+
+    $entry->asset = new stdclass();
     if(isset($date->field_media['und'][0]['fid'])){
-      $image = file_load($date->field_media['und'][0]['fid']); 
-      $entry->asset = new stdclass();
-      $entry->asset->media = file_create_url($image->uri);
-      $entry->asset->thumbnail = image_style_url('timelinejs_thumb', $image->uri);
+      $image = file_load($date->field_media['und'][0]['fid']);
+      $entry->asset->media = json_encode(file_create_url($image->uri));
+      $entry->asset->thumbnail = json_encode(image_style_url('timelinejs_thumb', $image->uri));
     }
     if(isset($date->field_media_url['und'][0]['value'])){
-      $entry->asset->media_url = $date->field_media_url['und'][0]['value'];
+      $entry->asset->media_url = json_encode($date->field_media_url['und'][0]['value']);
     }
     if(isset($date->field_media_caption['und'][0]['value'])){
-      $entry->asset->caption = $date->field_media_caption['und'][0]['value'];
+      $entry->asset->caption = json_encode($date->field_media_caption['und'][0]['value']);
     }
     if(isset($date->field_media_credit['und'][0]['value'])){
-      $entry->asset->credit = $date->field_media_credit['und'][0]['value'];
+      $entry->asset->credit = json_encode($date->field_media_credit['und'][0]['value']);
     }
     if(isset($date->field_custom_class_name['und'][0]['value'])){
-      $entry->class = $date->field_custom_class_name['und'][0]['value'];
+      $entry->class = json_encode($date->field_custom_class_name['und'][0]['value']);
     }
     $dateJson .= '{"startDate":' . $entry->startDate .',';
     $dateJson .= '"endDate":' . $entry->endDate .',';
@@ -140,44 +144,44 @@ function _timelinejs_block_dates_generator($block_id) {
     $dateJson .= '"text":' . $entry->text ;
 
     if(isset($entry->tag)){
-      $dateJson .= ',"tag":"' . $entry->tag .'"';
+      $dateJson .= ',"tag":' . $entry->tag;
     }
     if(isset($entry->class)){
-      $dateJson .= ',"classname":"'.$entry->class .'"';
+      $dateJson .= ',"classname":'.$entry->class;
     }
 
     if(isset($entry->asset->media)){
       $dateJson .= ',"asset":{';
-      $dateJson .= '"media":"'.$entry->asset->media.'",';
-      $dateJson .= '"thumbnail":"'.$entry->asset->thumbnail.'"';
+      $dateJson .= '"media":'.$entry->asset->media;
+      $dateJson .= ',"thumbnail":'.$entry->asset->thumbnail;
 
       if(!isset($entry->asset->caption) && !isset($entry->asset->credit)){
         $dateJson .= '}';
       } elseif(isset($entry->asset->caption)){
-          $dateJson .= ',"caption":"'.$entry->asset->caption.'"';
+          $dateJson .= ',"caption":'.$entry->asset->caption;
           if(!isset($entry->asset->credit)){
             $dateJson .= '}';
           } else {
-            $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+            $dateJson .= ',"credit":'.$entry->asset->credit.'}';
           }
       } else {
-          $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+          $dateJson .= ',"credit":'.$entry->asset->credit.'}';
         }
     } elseif(isset($entry->asset->media_url)){
       $dateJson .= ',"asset":{';
-      $dateJson .= '"media":"'.$entry->asset->media_url.'"';
+      $dateJson .= '"media":'.$entry->asset->media_url;
 
       if(!isset($entry->asset->caption) && !isset($entry->asset->credit)){
         $dateJson .= '}';
       } elseif(isset($entry->asset->caption)){
-          $dateJson .= ',"caption":"'.$entry->asset->caption.'"';
+          $dateJson .= ',"caption":'.$entry->asset->caption;
           if(!isset($entry->asset->credit)){
             $dateJson .= '}';
           } else {
-            $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+            $dateJson .= ',"credit":'.$entry->asset->credit.'}';
           }
       } else {
-          $dateJson .= ',"credit":"'.$entry->asset->credit.'"}';
+          $dateJson .= ',"credit":'.$entry->asset->credit.'}';
         }
     }
 

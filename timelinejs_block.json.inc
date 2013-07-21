@@ -192,7 +192,7 @@ function _timelinejs_block_dates_generator($block_id) {
 function _timelinejs_block_era_generator($block_id) {
   $block_id_era = variable_get('timelinejs_block_era_'.$block_id);
 
-  if(!empty($block_id_era)){
+  if(isset($block_id_era) && !empty($block_id_era)){
     $query = new EntityFieldQuery();
     $result = $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'timelinejs_era')

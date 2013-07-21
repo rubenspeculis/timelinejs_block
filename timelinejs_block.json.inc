@@ -11,32 +11,35 @@ require_once( dirname(__FILE__) . '/timelinejs_block.functions.inc');
 function timelinejs_block_json($block_identifier = 1){
   $dates = _timelinejs_block_dates_generator((int)$block_identifier);
   $era =  _timelinejs_block_era_generator((int)$block_identifier);
-  $headline = variable_get('timelinejs_block_headline_'.$block_identifier, 'This is a test');
+  $headline = json_encode(variable_get('timelinejs_block_headline_'.$block_identifier, 'This is a test'));
+
   $intro = variable_get('timelinejs_block_intro_'.$block_identifier, '');
   $intro = json_encode($intro['value']);
+
   $media = variable_get('timelinejs_block_title_image_'.$block_identifier);
-  $media_url = variable_get('timelinejs_block_title_image_url_'.$block_identifier, '');
-  $caption = variable_get('timelinejs_block_title_image_caption_'.$block_identifier, '');
-  $credit = variable_get('timelinejs_block_title_image_credit_'.$block_identifier, '');
+  $media_url = json_encode(variable_get('timelinejs_block_title_image_url_'.$block_identifier, ''));
+
+  $caption = json_encode(variable_get('timelinejs_block_title_image_caption_'.$block_identifier, ''));
+  $credit = json_encode(variable_get('timelinejs_block_title_image_credit_'.$block_identifier, ''));
 
   if($media!=''){
     $media = file_load($media);
-    $media_url = file_create_url($media->uri);
+    $media_url = json_encode(file_create_url($media->uri));
   }
 
   $timeline = '{"timeline":';
   $timeline .= '{';
-  $timeline .= '"headline":"'. $headline .'",';
+  $timeline .= '"headline":'. $headline .',';
   $timeline .= '"type":"default",';
   $timeline .= '"text":'.$intro.',';
   if($media_url != ''){
     $timeline .= '"asset":{';
-    $timeline .= '"media":"'.$media_url.'"';
+    $timeline .= '"media":'.$media_url;
     if($caption != ''){
-      $timeline .= ',"caption":"'.$caption.'"';
+      $timeline .= ',"caption":'.$caption;
     }
     if($credit != ''){
-      $timeline .= ',"credit":"'.$credit.'"';
+      $timeline .= ',"credit":'.$credit;
     }
     $timeline .= '},';
   }
@@ -97,9 +100,9 @@ function _timelinejs_block_dates_generator($block_id) {
         break;
     }
 
-    $entry->startDate = date($format, $adjustedStart);
-    $entry->endDate = date($format, $adjustedEnd);
-    $entry->headline = $date->title;
+    $entry->startDate = json_encode(date($format, $adjustedStart));
+    $entry->endDate = json_encode(date($format, $adjustedEnd));
+    $entry->headline = json_encode($date->title);
     if(isset($date->body['und'][0]['safe_value'])){
       $entry->text = $date->body['und'][0]['safe_value'];
     } else {
@@ -131,9 +134,9 @@ function _timelinejs_block_dates_generator($block_id) {
     if(isset($date->field_custom_class_name['und'][0]['value'])){
       $entry->class = $date->field_custom_class_name['und'][0]['value'];
     }
-    $dateJson .= '{"startDate":"' . $entry->startDate .'",';
-    $dateJson .= '"endDate":"' . $entry->endDate .'",';
-    $dateJson .= '"headline":"' . $entry->headline .'",';
+    $dateJson .= '{"startDate":' . $entry->startDate .',';
+    $dateJson .= '"endDate":' . $entry->endDate .',';
+    $dateJson .= '"headline":' . $entry->headline .',';
     $dateJson .= '"text":' . $entry->text ;
 
     if(isset($entry->tag)){
@@ -197,8 +200,10 @@ function _timelinejs_block_era_generator($block_id) {
       ->entityCondition('entity_id', $block_id_era, 'IN')
       ->fieldOrderBy('field_dates', 'value', 'ASC')
       ->execute();
-    $nids = array_keys($result['node']);
-    $nodes = node_load_multiple($block_id_era);
+    if(count($result) > 0){
+      $nids = array_keys($result['node']);
+      $nodes = node_load_multiple($nids);
+    }
   }
 
   if(!empty($nodes)){ 

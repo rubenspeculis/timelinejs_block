@@ -13,6 +13,7 @@ function timelinejs_block_json($block_identifier = 1){
   $era =  _timelinejs_block_era_generator((int)$block_identifier);
   $headline = variable_get('timelinejs_block_headline_'.$block_identifier, 'This is a test');
   $intro = variable_get('timelinejs_block_intro_'.$block_identifier, '');
+  $intro = json_encode($intro['value']);
   $media = variable_get('timelinejs_block_title_image_'.$block_identifier);
   $media_url = variable_get('timelinejs_block_title_image_url_'.$block_identifier, '');
   $caption = variable_get('timelinejs_block_title_image_caption_'.$block_identifier, '');
@@ -61,13 +62,13 @@ function _timelinejs_block_dates_generator($block_id) {
     $nodes = node_load_multiple($nids);
   } else {
     $query = new EntityFieldQuery();
-    $result = $query->entityCondition('entity_type', 'node')
+    $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'timelinejs_dates')
       ->entityCondition('entity_id', $block_id_dates, 'IN')
-      ->fieldOrderBy('field_dates', 'value', 'ASC')
-      ->execute();
+      ->fieldOrderBy('field_dates', 'value', 'ASC');
+    $result = $query->execute();
     $nids = array_keys($result['node']);
-    $nodes = node_load_multiple($block_id_dates);
+    $nodes = node_load_multiple($nids);
   }
 
   $dateJson = '"date":[';

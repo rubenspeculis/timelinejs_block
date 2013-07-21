@@ -173,7 +173,17 @@ function timelinejs_block_block_configure($delta){
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
-
+      $form['timelinejs_block_display']['timelinejs_block_showCat_table_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Do you want to showi the categories in the table at the bottom of this block?'),
+        '#default_value' => variable_get('timelinejs_block_showCat_table_'.$i, 'yes'),
+        '#options' => array(
+          'yes' => t('Yes'),
+          'no' => t('No')
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
       // CSS Configuration for next and previous regions
       $form['timelinejs_block_display']['timelinejs_block_previous_next_bg_'.$i] = array(
         '#type' => 'textfield',
@@ -280,6 +290,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
       variable_set('timelinejs_block_cat_odd_'.$i, $edit['timelinejs_block_cat_odd_'.$i]);
       variable_set('timelinejs_block_cat_even_'.$i, $edit['timelinejs_block_cat_even_'.$i]);
+      variable_set('timelinejs_block_showCat_table_'.$i, $edit['timelinejs_block_showCat_table_'.$i]);
       variable_set('timelinejs_block_cat_font_'.$i, $edit['timelinejs_block_cat_font_'.$i]);
       _timelinejs_block_era_css_save($i, $edit);
     }

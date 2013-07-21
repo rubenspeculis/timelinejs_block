@@ -109,8 +109,6 @@ function _timelinejs_block_dates_generator($block_id) {
       $readmore = '<p><a href="'.$date->field_read_more['und'][0]['value'].'" title="Read More">Read More</a></p>';
       $entry->text .= $readmore;
     }
-    $entry->text = _ms_to_UTF8_convert($entry->text);
-    $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
     $entry->text = json_encode($entry->text);
     if(!empty($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
@@ -237,8 +235,7 @@ function _timelinejs_block_era_generator($block_id) {
 
       $entry->headline = $era->title;
       $entry->text = isset($era->body['und'][0]['safe_value']) ? $era->body['und'][0]['safe_value'] : "";
-      $entry->text = _ms_to_UTF8_convert($entry->text);
-      $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
+      $entry->text = json_encode($entry->text);
       if(isset($era->field_timeline_category['und'][0]['tid'])){
         $entry->tag = taxonomy_term_load($era->field_timeline_category['und'][0]['tid'])->name;
       }
@@ -246,7 +243,7 @@ function _timelinejs_block_era_generator($block_id) {
       $eraJson .= '{"startDate":"' . $entry->startDate . '",';
       $eraJson .= '"endDate":"' . $entry->endDate .'",';
       $eraJson .= '"headline":"' . $entry->headline .'",';
-      $eraJson .= '"text":"' . $entry->text .'"';
+      $eraJson .= '"text":' . $entry->text;
       if(isset($entry->tag)){
         $eraJson .= ',"tag":"' . $entry->tag .'"';
       }

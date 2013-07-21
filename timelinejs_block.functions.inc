@@ -36,7 +36,7 @@ function _timelinejs_block_table_generator($block_id = '1') {
       }
     }
     $date_rows .= "<td>".$date->headline."</td>";
-    $date_rows .= "<td>".addslashes($date->text)."</td>";
+    $date_rows .= "<td>".$date->text."</td>";
     $date_rows .= "</tr>";
   }
 

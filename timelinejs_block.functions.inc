@@ -26,7 +26,7 @@ function _timelinejs_block_table_generator($block_id = '1') {
   $date_rows = '';
   foreach($dates as $date){
     $date_rows .= "<tr>";
-    $startDate = strtotime(str_replace(',','/',$date->startDate));
+    $startDate = strtotime(str_replace(',','-',$date->startDate));
     $date_rows .= "<td>".date('Y/m/d', $startDate)."</td>";
     if('yes' == $showCat){
       if(isset($date->tag) && !empty($date->tag)){

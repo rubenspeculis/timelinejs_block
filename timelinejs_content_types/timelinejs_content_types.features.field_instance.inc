@@ -141,7 +141,7 @@ function timelinejs_content_types_field_default_field_instances() {
         'input_format_custom' => '',
         'label_position' => 'above',
         'text_parts' => array(),
-        'year_range' => '-2500:+50',
+        'year_range' => '1200:+50',
       ),
       'type' => 'date_select',
       'weight' => 4,

@@ -112,7 +112,7 @@ function _timelinejs_block_dates_generator($block_id) {
     $entry->text = _ms_to_UTF8_convert($entry->text);
     $entry->text = str_replace(array("\r\n", "\r", "\n"), "", $entry->text);
     $entry->text = json_encode($entry->text);
-    if(isset($date->field_timeline_category['und'][0]['tid'])){
+    if(!empty($date->field_timeline_category['und'][0]['tid'])){
       $entry->tag = taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name;
     }
     if(isset($date->field_media['und'][0]['fid'])){

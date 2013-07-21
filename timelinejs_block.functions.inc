@@ -144,17 +144,14 @@ function _timelinejs_block_block_config_dates_options() {
     'title' => array('data' => t('Title'), 'field' => 'n.title'),
     'startDate' => array('data' => t('Start Date'), 'field' => 'd.field_dates_value'),
     'endDate' => array('data' => t('End Date'), 'field' => 'd.field_dates_value2'),
-    'category' => array('data' => t('Category') , 'field' => 'c.field_timeline_category_tid'),
     'status' => array('data' => t('Status'), 'field' => 'n.status'),
   );
   $query = db_select('node', 'n');
   $query->join('field_data_field_dates', 'd', 'n.nid = d.entity_id');
-  $query->join('field_data_field_timeline_category', 'c', 'n.nid = c.entity_id');
   $dates_nids = $query
     ->fields('n', array('nid'))
     ->fields('d', array('field_dates_value'))
     ->fields('d', array('field_dates_value2'))
-    ->fields('c', array('field_timeline_category_tid'))
     ->extend('TableSort')
     ->orderByHeader($header_dates)
     ->execute()
@@ -172,7 +169,6 @@ function _timelinejs_block_block_config_dates_options() {
       ),
       'startDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value'])),
       'endDate' => date('Y-m-d', strtotime($date->field_dates['und'][0]['value2'])),
-      'category' => isset($date->field_timeline_category['und']) ? taxonomy_term_load($date->field_timeline_category['und'][0]['tid'])->name : '&nbsp;',
       'status' => $date->status ? t('Published') : t('Not Published'),
     );
   }

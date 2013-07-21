@@ -8,10 +8,15 @@
  * Function to return table of JSON file.
  */
 function _timelinejs_block_table_generator($block_id = '1') {
+
+  $showCat = variable_get('timelinejs_block_showCat_table_'.$block_id, 'no');
+
   // Configure Header Row
   $header_row = "<tr>";
   $header_row .= "<th>Date</th>";
-  $header_row .= "<th>Category</th>";
+  if('yes' == $showCat){
+    $header_row .= "<th>Category</th>";
+  }
   $header_row .= "<th>Title</th>";
   $header_row .= "<th>Summary Text</th>";
   $header_row .= "</tr>";
@@ -21,11 +26,14 @@ function _timelinejs_block_table_generator($block_id = '1') {
   $date_rows = '';
   foreach($dates as $date){
     $date_rows .= "<tr>";
-    $date_rows .= "<td>".$date->startDate."</td>";
-    if(isset($date->tag)){
-      $date_rows .= "<td>".$date->tag."</td>";
-    } else {
-      $date_rows .= "<td>&nbsp;</td>";
+    $startDate = strtotime(str_replace(',','/',$date->startDate));
+    $date_rows .= "<td>".date('Y/m/d', $startDate)."</td>";
+    if('yes' == $showCat){
+      if(isset($date->tag) && !empty($date->tag)){
+        $date_rows .= "<td>".$date->tag."</td>";
+      } else {
+        $date_rows .= "<td>&nbsp;</td>";
+      }
     }
     $date_rows .= "<td>".$date->headline."</td>";
     $date_rows .= "<td>".addslashes($date->text)."</td>";

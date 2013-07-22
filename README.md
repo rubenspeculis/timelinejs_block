@@ -28,4 +28,5 @@ To install:
     *  Save your block.
 5. View your results.
 
-
+##Notes
+Currently the TimelineJS Chart Content Type exists, is processed by the json and if correct as per the examples given in github. However, they are not currelty generating a plot.

@@ -33,6 +33,10 @@ function timelinejs_block_block_configure($delta){
   $header_eras = $era_results['header'];
   $era_options = $era_results['era_options'];
 
+  $chart_results = _timelinejs_block_block_config_chart_options();
+  $header_charts = $chart_results['header'];
+  $chart_options = $chart_results['chart_options'];
+
   $number_of_blocks = variable_get('timelinejs_block_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
     if($delta === 'timelinejs_block_'.$i){
@@ -136,6 +140,22 @@ function timelinejs_block_block_configure($delta){
 
       $form['timelinejs_block_era'][] = _timelinejs_block_era_css_fields($era_count, $i); 
 
+      // Creates the Chart select options
+      $form['timelinejs_block_chart'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Select Chart for Timeline'),
+        '#weight' => 15,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE
+      );
+      $form['timelinejs_block_chart']['timelinejs_block_chart_'.$i] = array(
+        '#type' => 'tableselect',
+        '#title' => t('Select the Charts to appear on the timeline'),
+        '#header' => $header_charts,
+        '#options' => $chart_options,
+        '#empty' => t('No Content available'),
+        '#default_value' => variable_get('timelinejs_block_chart_'.$i, array())
+      );
       // Form Setup for Block level display configuration
       $form['timelinejs_block_display'] = array(
         '#type' => 'fieldset',

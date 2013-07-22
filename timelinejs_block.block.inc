@@ -161,6 +161,17 @@ function timelinejs_block_block_configure($delta){
         '#required' => TRUE,
       );
 
+      //Set Start Slide
+      $form['timelinejs_block_display']['timelinejs_block_starting_slide_'.$i] = array(
+        '#type' => 'textfield',
+        '#title' => t('Starting Slide'),
+        '#size' => 30,
+        '#description' => t('Which slide should the timeline start at?'),
+        '#default_value' => variable_get('timelinejs_block_starting_slide_'.$i, '0'),
+        '#required' => TRUE,
+      );
+
+
       // Display Assecibility table
       $form['timelinejs_block_display']['timelinejs_block_access_'.$i] = array(
         '#type' => 'select',
@@ -283,6 +294,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_title_image_credit_'.$i, $edit['timelinejs_block_title_image_credit_'.$i]);
       variable_set('timelinejs_block_width_'.$i, $edit['timelinejs_block_width_'.$i]);
       variable_set('timelinejs_block_height_'.$i, $edit['timelinejs_block_height_'.$i]);
+      variable_set('timelinejs_block_starting_slide_'.$i, $edit['timelinejs_block_starting_slide_'.$i]);
       variable_set('timelinejs_block_previous_next_bg_'.$i, $edit['timelinejs_block_previous_next_bg_'.$i]);
       variable_set('timelinejs_block_previous_next_font_'.$i, $edit['timelinejs_block_previous_next_font_'.$i]);
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
@@ -320,6 +332,7 @@ function timelinejs_block_block_content($identifier = 1) {
   $height = variable_get('timelinejs_block_height_'.$identifier, '600');
   $height = str_replace('px', '', $height);
   $font = variable_get('timelinejs_block_font_select', 'Arvo-PTSans');
+  $starting_slide = variable_get('timelinejs_block_starting_slide_'.$identifier, '0');
   $start_zoom = variable_get('timelinejs_block_start_zoom_'.$identifier, '0');
 
   $previous_next_bg = urlencode(variable_get('timelinejs_block_previous_next_bg_'.$identifier, '#fff'));
@@ -370,6 +383,7 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "\ttype: 'timeline',\n";
     $content .= "\twidth: '$width', height: '$height',\n";
     $content .= "\tsource: '/json/$identifier',\n";
+    $content .= "\tstart_at_slide: '$starting_slide',\n";
     $content .= "\tstart_zoom_adjust: '$start_zoom',\n";
     if($font!='other'){
       $content .= "\tfont: '$font',\n";

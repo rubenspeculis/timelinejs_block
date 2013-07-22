@@ -306,6 +306,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
     if($delta === 'timelinejs_block_'.$i){
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
+      variable_set('timelinejs_block_chart_'.$i, $edit['timelinejs_block_chart_'.$i]);
       variable_set('timelinejs_block_headline_'.$i, $edit['timelinejs_block_headline_'.$i]);
       variable_set('timelinejs_block_intro_'.$i, $edit['timelinejs_block_intro_'.$i]);
       variable_set('timelinejs_block_title_image_'.$i, $edit['timelinejs_block_title_image_'.$i]);

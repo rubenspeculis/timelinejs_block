@@ -316,8 +316,8 @@ function _timelinejs_block_chart_generator($block_id) {
           break;
       }
 
-      $entry->startDate = json_encode(date($format, $adjustedStart));
-      $entry->endDate = json_encode(date($format, $adjustedEnd));
+      $entry->startDate = json_encode(date('Y,m,d', $adjustedStart));
+      $entry->endDate = json_encode(date('Y,m,d', $adjustedEnd));
 
       $entry->headline = json_encode($chart->title);
       $entry->chart_value = json_encode($chart->field_chart_value['und'][0]['value']);

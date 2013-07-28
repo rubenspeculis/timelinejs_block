@@ -11,6 +11,7 @@ require_once( dirname(__FILE__) . '/timelinejs_block.functions.inc');
 function timelinejs_block_json($block_identifier = 1){
   $dates = _timelinejs_block_dates_generator((int)$block_identifier);
   $era =  _timelinejs_block_era_generator((int)$block_identifier);
+  $chart =  _timelinejs_block_chart_generator((int)$block_identifier);
   $headline = json_encode(variable_get('timelinejs_block_headline_'.$block_identifier, 'This is a test'));
 
   $intro = variable_get('timelinejs_block_intro_'.$block_identifier, '');
@@ -45,6 +46,7 @@ function timelinejs_block_json($block_identifier = 1){
   }
   $timeline .= $dates;
   $timeline .= $era;
+  $timeline .= $chart;
   $timeline .= '}}';
 
   header('Content-Type: application/json');
@@ -264,6 +266,74 @@ function _timelinejs_block_era_generator($block_id) {
       }
     }
     return $eraJson;
+  } else {
+    return '';
+  }
+}
+
+function _timelinejs_block_chart_generator($block_id) {
+  $block_id_era = variable_get('timelinejs_block_chart_'.$block_id);
+
+  if(isset($block_id_era) && !empty($block_id_era)){
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'timelinejs_chart')
+      ->entityCondition('entity_id', $block_id_era, 'IN')
+      ->fieldOrderBy('field_dates', 'value', 'ASC')
+      ->execute();
+    if(count($result) > 0){
+      $nids = array_keys($result['node']);
+      $nodes = node_load_multiple($nids);
+    }
+  }
+
+  if(!empty($nodes)){ 
+    $chartJson = ',"chart":[';
+
+    $timezone = date_default_timezone();
+
+    foreach($nodes as $chart){
+      $entry = new stdClass();
+      $startDate = date_create($chart->field_dates['und'][0]['value']);
+      $endDate = date_create($chart->field_dates['und'][0]['value2']);
+
+      date_timezone_set($startDate, timezone_open($timezone));
+      date_timezone_set($endDate, timezone_open($timezone));
+      $adjustedStart = date_format($startDate, 'U') + date_offset_get($startDate);
+      $adjustedEnd = date_format($endDate, 'U') + date_offset_get($endDate);
+
+      $granularity = variable_get('timelinejs_block_granularity_'.$block_id, 'ymd');
+
+      switch ($granularity) {
+        case 'ymd':
+          $format = 'Y,m,d';
+          break;
+        case 'ym':
+          $format = 'Y,m';
+          break;
+        case 'y':
+          $format = 'Y';
+          break;
+      }
+
+      $entry->startDate = json_encode(date($format, $adjustedStart));
+      $entry->endDate = json_encode(date($format, $adjustedEnd));
+
+      $entry->headline = json_encode($chart->title);
+      $entry->chart_value = json_encode($chart->field_chart_value['und'][0]['value']);
+
+      $chartJson .= '{"startDate":' . $entry->startDate . ',';
+      $chartJson .= '"endDate":' . $entry->endDate .',';
+      $chartJson .= '"headline":' . $entry->headline .',';
+      $chartJson .= '"value":' . $entry->chart_value;
+
+      if($chart === end($nodes)){
+        $chartJson .= '}]';
+      } else {
+        $chartJson .= '},';
+      }
+    }
+    return $chartJson;
   } else {
     return '';
   }

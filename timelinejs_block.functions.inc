@@ -153,6 +153,49 @@ function _timelinejs_block_block_config_era_options() {
   return $results;
 }
 
+// Function to build tableselect chart options in block config.
+function _timelinejs_block_block_config_chart_options() {
+
+  $header_chart = array(
+    'c_title' => array('data' => t('Chart Title'), 'field' => 'nc.title'),
+    'c_startDate' => array('data' => t('Chart Start Date'), 'field' => 'dc.field_dates_value'),
+    'c_endDate' => array('data' => t('Chart End Date'), 'field' => 'dc.field_dates_value2'),
+    'c_status' => array('data' => t('Chart Status'), 'field' => 'nc.status'),
+  );
+  $query = db_select('node', 'nc');
+  $query->join('field_data_field_dates', 'dc', 'nc.nid = dc.entity_id');
+  $chart_nids = $query
+    ->fields('nc', array('nid'))
+    ->fields('dc', array('field_dates_value'))
+    ->fields('dc', array('field_dates_value2'))
+    ->extend('TableSort')
+    ->orderByHeader($header_chart)
+    ->execute()
+    ->fetchCol();
+
+  $chart_nodes = node_load_multiple($chart_nids, array('type' => 'timelinejs_chart'));
+  $chart_options = array();
+  foreach($chart_nodes as $chart){
+    $chart_options[$chart->nid] = array(
+      'c_title' => array(
+        'data' => array(
+          '#type' => 'link',
+          '#title' => $chart->title,
+          '#href' => 'node/'.$chart->nid,
+        )
+      ),
+      'c_startDate' => date('Y-m-d', strtotime($chart->field_dates['und'][0]['value'])),
+      'c_endDate' => date('Y-m-d', strtotime($chart->field_dates['und'][0]['value2'])),
+      'c_status' => $chart->status ? t('Published') : t('Not Published'),
+    );
+  }
+  $results = array(
+    'header' => $header_chart,
+    'chart_options' => $chart_options
+  );
+  return $results;
+}
+
 // Function to build table select for dates in block config.
 function _timelinejs_block_block_config_dates_options() {
 

@@ -268,7 +268,18 @@ function timelinejs_block_block_configure($delta){
         '#multiple' => FALSE,
         '#required' => TRUE,
       );
-
+      $form['timelinejs_block_display']['timelinejs_block_cat_hide_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Hide or show timeline category'),
+        '#description' => t('Determine whether to hide or hoe the timeline categories.'),
+        '#default_value' => variable_get('timelinejs_block_cat_hide_'.$i, 'show'),
+        '#options' => array(
+          'show' => t('Show'),
+          'hide' => t('Hide')
+        ),
+        '#multiple' => FALSE,
+        '#required' => FALSE,
+      );
       // Set Category colors
       $form['timelinejs_block_display']['timelinejs_block_cat_odd_'.$i] = array(
         '#type' => 'textfield',
@@ -321,6 +332,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_granularity_'.$i, $edit['timelinejs_block_granularity_'.$i]);
       variable_set('timelinejs_block_access_'.$i, $edit['timelinejs_block_access_'.$i]);
       variable_set('timelinejs_block_start_zoom_'.$i, $edit['timelinejs_block_start_zoom_'.$i]);
+      variable_set('timelinejs_block_cat_hide_'.$i, $edit['timelinejs_block_cat_hide_'.$i]);
       variable_set('timelinejs_block_cat_odd_'.$i, $edit['timelinejs_block_cat_odd_'.$i]);
       variable_set('timelinejs_block_cat_even_'.$i, $edit['timelinejs_block_cat_even_'.$i]);
       variable_set('timelinejs_block_showCat_table_'.$i, $edit['timelinejs_block_showCat_table_'.$i]);
@@ -377,10 +389,11 @@ function timelinejs_block_block_content($identifier = 1) {
 
   $cat_odd_color = urlencode(variable_get('timelinejs_block_cat_odd_'.$identifier, '#ddd'));
   $cat_even_color = urlencode(variable_get('timelinejs_block_cat_even_'.$identifier, '#999'));
-  $cat_font_color = urlencode(variable_get('timelinejs_block_catt_font_'.$identifier, '#333'));
+  $cat_font_color = urlencode(variable_get('timelinejs_block_cat_font_'.$identifier, '#333'));
+  $cat_hide_category = urlencode(variable_get('timelinejs_block_cat_hide_'.$identifier, 'hide'));
 
   $cat_color_css_path = '/'.drupal_get_path('module','timelinejs_block').'/css/custom_category_css.php?';
-  $cat_color_css_path .= 'oddcolor='.$cat_odd_color.'&evencolor='.$cat_even_color.'&catfontcolor='.$cat_font_color;
+  $cat_color_css_path .= 'oddcolor='.$cat_odd_color.'&evencolor='.$cat_even_color.'&catfontcolor='.$cat_font_color.'&catDisplay='.$cat_hide_category;
 
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     if(!empty($era_css)){

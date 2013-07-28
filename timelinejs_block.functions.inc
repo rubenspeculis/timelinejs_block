@@ -10,6 +10,7 @@
 function _timelinejs_block_table_generator($block_id = '1') {
 
   $showCat = variable_get('timelinejs_block_showCat_table_'.$block_id, 'no');
+  $granularity = variable_get('timelinejs_block_granularity_'.$block_id);
 
   // Configure Header Row
   $header_row = "<tr>";
@@ -26,8 +27,15 @@ function _timelinejs_block_table_generator($block_id = '1') {
   $date_rows = '';
   foreach($dates as $date){
     $date_rows .= "<tr>";
-    $startDate = strtotime(str_replace(',','-',$date->startDate));
-    $date_rows .= "<td>".date('Y/m/d', $startDate)."</td>";
+    if ( $granularity == 'y' ) {
+      $startDate = strtotime($date->startDate.'-01-01');
+    } elseif ($granularity == 'ym' ) {
+      $startDate = strtotime(str_replace(',','-',$date->startDate).'-01');
+    } else {
+      $startDate = strtotime(str_replace(',','-',$date->startDate));
+    }
+
+    $date_rows .= "<td>".date('Y', $startDate)."</td>";
     if('yes' == $showCat){
       if(isset($date->tag) && !empty($date->tag)){
         $date_rows .= "<td>".$date->tag."</td>";

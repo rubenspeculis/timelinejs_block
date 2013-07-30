@@ -312,3 +312,49 @@ function _ms_to_UTF8_convert($string) {
   $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
   return $string;
 }
+
+/**
+ * Function to find the index of the date entries matching eras.
+ */
+function _timelinejs_era_date_matcher($block_id = 1) {
+  global $base_url;
+  $json_path = $base_url . '/json/' . $block_id;
+  $json = file_get_contents($json_path);
+  $isJson = _timelinejs_block_isJson($json);
+  if($isJson) {
+    $json = json_decode($json);
+  } else {
+    drupal_set_message('JSON parsing failed', 'error');
+    exit();
+  }
+
+  $date = $json->timeline->date;
+
+  if(isset($json->timeline->era) && !empty($json->timeline->era)){
+    $era = $json->timeline->era;
+    //dump($era);
+  } else {
+    return FALSE;
+  }
+
+  $era_headlines = array();
+  $date_headlines = array();
+
+  foreach($era as $key => $obj) {
+    $era_headlines[$key] = $obj->headline;
+  }
+
+  foreach($date as $key => $obj){
+    $date_headlines[$key] = $obj->headline;
+  }
+  $result = array();
+
+  foreach($era_headlines as $headline) {
+    $result[$headline] = array_search($headline, $date_headlines);
+    $result = array_filter($result, "is_numeric");
+  }
+
+  return $result;
+
+}
+

@@ -386,7 +386,7 @@ function timelinejs_block_block_content($identifier = 1) {
       }
     }
   }
-
+  $date_era_matcher = _timelinejs_era_date_matcher();
   $cat_odd_color = urlencode(variable_get('timelinejs_block_cat_odd_'.$identifier, '#ddd'));
   $cat_even_color = urlencode(variable_get('timelinejs_block_cat_even_'.$identifier, '#999'));
   $cat_font_color = urlencode(variable_get('timelinejs_block_cat_font_'.$identifier, '#333'));
@@ -427,6 +427,10 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "})\n";
     $content .= '</script>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
+    foreach($date_era_matcher as $key => $value) {
+      $value++;
+      $content .= "\t".'<a href="#'.$value.'">'.$key.'</a>'."\n";
+    }
     if($access == 1) {
       $table = _timelinejs_block_table_generator($identifier);
       $content .= '<div id="timeline_table_'.$identifier.'" class="timelinejs_table">';

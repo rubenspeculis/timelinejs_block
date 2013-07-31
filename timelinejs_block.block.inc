@@ -431,6 +431,7 @@ function timelinejs_block_block_content($identifier = 1) {
 
   $cat_color_css_path = '/'.drupal_get_path('module','timelinejs_block').'/css/custom_category_css.php?';
   $cat_color_css_path .= 'oddcolor='.$cat_odd_color.'&evencolor='.$cat_even_color.'&catfontcolor='.$cat_font_color.'&catDisplay='.$cat_hide_category;
+  $nav_css_path = '/'.drupal_get_path('module','timelinejs_block').'/css/custom_timeline_nav.php?';
 
   if(($library = libraries_load($library_name)) && !empty($library['loaded'])){
     if(!empty($era_css)){
@@ -449,6 +450,8 @@ function timelinejs_block_block_content($identifier = 1) {
     }
     drupal_add_css($previous_next_css_path);
     drupal_add_css($cat_color_css_path);
+    drupal_add_css($nav_css_path);
+
     $content = "<script>jQuery(document).ready(function() {\n";
     $content .= 'createStoryJS({'."\n";
     $content .= "\ttype: 'timeline',\n";

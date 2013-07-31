@@ -355,10 +355,10 @@ function _timelinejs_era_date_matcher($block_id = 1) {
   }
 
   if(!empty($result)){
-    $html = '<ul class="era-navigation"><li><strong>Navigate by eras:</strong></li><li><a href="#0" title="Go to Start">Introduction</a></li>';
+    $html = '<ul class="era-navigation"><li class="era-nav-label">Navigate by eras:</li><li class="era-nav-link"><a href="#0" title="Go to Start">Introduction</a></li>';
     foreach($result as $era => $link){
       $link++;
-      $html .= '<li><a href="#'.$link.'" title="Go to '.$era.'">'.$era.'</a></li>';
+      $html .= '<li class="era-nav-link"><a href="#'.$link.'" title="Go to '.$era.'">'.$era.'</a></li>';
     }
     $html .= '</ul>';
     return $html;

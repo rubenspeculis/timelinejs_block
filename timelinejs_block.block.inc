@@ -140,6 +140,7 @@ function timelinejs_block_block_configure($delta){
 
       $form['timelinejs_block_era'][] = _timelinejs_block_era_css_fields($era_count, $i);
 
+      // Determines whether to show the era navigation
       $form['timelinejs_block_era']['timelinejs_block_era_nav_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Enable navigation by era'),
@@ -147,6 +148,21 @@ function timelinejs_block_block_configure($delta){
         '#options' => array(
           'yes' => t('Yes'),
           'no' => t('No')
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
+
+      // If era navigation is shown whenre should it be displayed?
+      $form['timelinejs_block_era']['timelinejs_block_era_nav_display_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Where should the Era navgigation be shown?'),
+        '#description' => t('The era navigation can be displayed above, below or above and below the timeline. It can be styled by editing the .era-navigation class'),
+        '#default_value' => variable_get('timelinejs_block_era_nav_display_'.$i, 'below'),
+        '#options' => array(
+          'below' => t('Display below the timeline'),
+          'above' => t('Display above the timeline'),
+          'both' =>  t('Display both above and below the timeline')
         ),
         '#multiple' => FALSE,
         '#required' => TRUE,
@@ -330,6 +346,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
       variable_set('timelinejs_block_era_nav_'.$i, $edit['timelinejs_block_era_nav_'.$i]);
+      variable_set('timelinejs_block_era_nav_display_'.$i, $edit['timelinejs_block_era_nav_display_'.$i]);
       variable_set('timelinejs_block_chart_'.$i, $edit['timelinejs_block_chart_'.$i]);
       variable_set('timelinejs_block_headline_'.$i, $edit['timelinejs_block_headline_'.$i]);
       variable_set('timelinejs_block_intro_'.$i, $edit['timelinejs_block_intro_'.$i]);
@@ -401,6 +418,10 @@ function timelinejs_block_block_content($identifier = 1) {
   }
   if(variable_get('timelinejs_block_era_nav_'.$identifier, 'yes') == 'yes') {
     $date_era_matcher = _timelinejs_era_date_matcher();
+    $era_nav_display = variable_get('timelinejs_block_era_nav_display_'.$identifier); 
+  } else {
+    $date_era_matcher = FALSE;
+    $era_nav_display = FALSE;
   }
 
   $cat_odd_color = urlencode(variable_get('timelinejs_block_cat_odd_'.$identifier, '#ddd'));
@@ -442,9 +463,19 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "\tembed_id: 'timeline_$identifier'});\n";
     $content .= "})\n";
     $content .= '</script>';
+    // Era Nav above the timeline
+    if($era_nav_display == 'above' || $era_nav_display == 'both'){
+      if($date_era_matcher != FALSE){
+        $content .= "\t".$date_era_matcher."\n";
+      }
+    }
+    // Timeline DIV
     $content .= '<div id="timeline_'.$identifier.'"></div>';
-    if($date_era_matcher != FALSE){
-      $content .= "\t".$date_era_matcher."\n";
+    // Era nav below the timeline
+    if($era_nav_display == 'below' || $era_nav_display == 'both'){
+      if($date_era_matcher != FALSE){
+        $content .= "\t".$date_era_matcher."\n";
+      }
     }
     if($access == 1) {
       $table = _timelinejs_block_table_generator($identifier);

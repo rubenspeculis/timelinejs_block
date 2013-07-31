@@ -17,4 +17,6 @@ if(isset($era)) {
   }
 }
 
+$css .= '.era-navigation li { display: inline;  margin-right: 6px;}';
+
 echo $css;

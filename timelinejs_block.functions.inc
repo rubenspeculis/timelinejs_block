@@ -347,6 +347,7 @@ function _timelinejs_era_date_matcher($block_id = 1) {
   foreach($date as $key => $obj){
     $date_headlines[$key] = $obj->headline;
   }
+
   $result = array();
 
   foreach($era_headlines as $headline) {
@@ -354,7 +355,17 @@ function _timelinejs_era_date_matcher($block_id = 1) {
     $result = array_filter($result, "is_numeric");
   }
 
-  return $result;
+  if(!empty($result)){
+    $html = '<ul class="era-navigation">';
+    foreach($result as $era => $link){
+      $link++;
+      $html .= '<li><a href="#'.$link.'" title="Go to '.$era.'">'.$era.'</a></li>';
+    }
+    $html .= '</ul>';
+    return $html;
+  } else {
+    return FALSE;
+  }
 
 }
 

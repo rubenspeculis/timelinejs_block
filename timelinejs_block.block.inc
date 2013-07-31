@@ -443,11 +443,8 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "})\n";
     $content .= '</script>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
-    if(!empty($date_era_matcher)){
-      foreach($date_era_matcher as $key => $value) {
-        $value++;
-        $content .= "\t".'<a href="#'.$value.'">'.$key.'</a>'."\n";
-      }
+    if($date_era_matcher != FALSE){
+      $content .= "\t".$date_era_matcher."\n";
     }
     if($access == 1) {
       $table = _timelinejs_block_table_generator($identifier);

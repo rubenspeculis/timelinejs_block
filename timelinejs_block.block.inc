@@ -138,7 +138,19 @@ function timelinejs_block_block_configure($delta){
       $eras = variable_get('timelinejs_block_era_'.$i, array());
       $era_count = count(array_filter(array_values($eras)));
 
-      $form['timelinejs_block_era'][] = _timelinejs_block_era_css_fields($era_count, $i); 
+      $form['timelinejs_block_era'][] = _timelinejs_block_era_css_fields($era_count, $i);
+
+      $form['timelinejs_block_era']['timelinejs_block_era_nav_'.$i] = array(
+        '#type' => 'select',
+        '#title' => t('Enable navigation by era'),
+        '#default_value' => variable_get('timelinejs_block_era_nav_'.$i, 'yes'),
+        '#options' => array(
+          'yes' => t('Yes'),
+          'no' => t('No')
+        ),
+        '#multiple' => FALSE,
+        '#required' => TRUE,
+      );
 
       // Creates the Chart select options
       $form['timelinejs_block_chart'] = array(
@@ -317,6 +329,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
     if($delta === 'timelinejs_block_'.$i){
       variable_set('timelinejs_block_dates_'.$i, $edit['timelinejs_block_dates_'.$i]);
       variable_set('timelinejs_block_era_'.$i, $edit['timelinejs_block_era_'.$i]);
+      variable_set('timelinejs_block_era_nav_'.$i, $edit['timelinejs_block_era_nav_'.$i]);
       variable_set('timelinejs_block_chart_'.$i, $edit['timelinejs_block_chart_'.$i]);
       variable_set('timelinejs_block_headline_'.$i, $edit['timelinejs_block_headline_'.$i]);
       variable_set('timelinejs_block_intro_'.$i, $edit['timelinejs_block_intro_'.$i]);
@@ -386,7 +399,10 @@ function timelinejs_block_block_content($identifier = 1) {
       }
     }
   }
-  $date_era_matcher = _timelinejs_era_date_matcher();
+  if(variable_get('timelinejs_block_era_nav_'.$identifier, 'yes') == 'yes') {
+    $date_era_matcher = _timelinejs_era_date_matcher();
+  }
+
   $cat_odd_color = urlencode(variable_get('timelinejs_block_cat_odd_'.$identifier, '#ddd'));
   $cat_even_color = urlencode(variable_get('timelinejs_block_cat_even_'.$identifier, '#999'));
   $cat_font_color = urlencode(variable_get('timelinejs_block_cat_font_'.$identifier, '#333'));
@@ -427,9 +443,11 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "})\n";
     $content .= '</script>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
-    foreach($date_era_matcher as $key => $value) {
-      $value++;
-      $content .= "\t".'<a href="#'.$value.'">'.$key.'</a>'."\n";
+    if(!empty($date_era_matcher)){
+      foreach($date_era_matcher as $key => $value) {
+        $value++;
+        $content .= "\t".'<a href="#'.$value.'">'.$key.'</a>'."\n";
+      }
     }
     if($access == 1) {
       $table = _timelinejs_block_table_generator($identifier);

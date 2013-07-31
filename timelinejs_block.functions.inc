@@ -332,7 +332,6 @@ function _timelinejs_era_date_matcher($block_id = 1) {
 
   if(isset($json->timeline->era) && !empty($json->timeline->era)){
     $era = $json->timeline->era;
-    //dump($era);
   } else {
     return FALSE;
   }
@@ -356,7 +355,7 @@ function _timelinejs_era_date_matcher($block_id = 1) {
   }
 
   if(!empty($result)){
-    $html = '<ul class="era-navigation">';
+    $html = '<ul class="era-navigation"><li><strong>Navigate by eras:</strong></li><li><a href="#0" title="Go to Start">Introduction</a></li>';
     foreach($result as $era => $link){
       $link++;
       $html .= '<li><a href="#'.$link.'" title="Go to '.$era.'">'.$era.'</a></li>';

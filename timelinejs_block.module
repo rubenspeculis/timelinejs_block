@@ -13,7 +13,7 @@ function timelinejs_block_menu() {
     'title' => t('JSON'),
     'page callback' => 'timelinejs_block_json',
     'page arguments' => array(1),
-    'access arguments' => array('access content'),
+    'access arguments' => array('access timelinejs block'),
     'file' => 'timelinejs_block.json.inc',
     'type' => MENU_CALLBACK,
   );
@@ -27,6 +27,18 @@ function timelinejs_block_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   return $items;
+}
+
+/**
+ * Implement hook_permisssion().
+ */
+function timelinejs_block_permission() {
+  return array(
+    'access timelinejs block' => array(
+      'title' => t('Access TimelineJS Blocks'),
+      'description' => t('View TimelineJS Blocks'),
+    )
+  );
 }
 
 /**

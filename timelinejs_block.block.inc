@@ -378,7 +378,7 @@ function timelinejs_block_block_save($delta = '', $edit = array()){
 function timelinejs_block_block_view($delta = ''){
   $number_of_blocks = variable_get('timelinejs_block_number_of_blocks', '2');
   for($i=1; $i<=$number_of_blocks; $i++){
-    if($delta === 'timelinejs_block_'.$i) {
+    if($delta === 'timelinejs_block_'.$i && user_access('access timelinejs block')) {
       $block['subject'] = '';
       $block['content'] = timelinejs_block_block_content($i);
       return $block;

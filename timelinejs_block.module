@@ -13,7 +13,7 @@ function timelinejs_block_menu() {
     'title' => t('JSON'),
     'page callback' => 'timelinejs_block_json',
     'page arguments' => array(1),
-    'access arguments' => array('access timelinejs block'),
+    'access arguments' => array('access timelinejs json'),
     'file' => 'timelinejs_block.json.inc',
     'type' => MENU_CALLBACK,
   );
@@ -34,9 +34,13 @@ function timelinejs_block_menu() {
  */
 function timelinejs_block_permission() {
   return array(
+    'access timelinejs json' => array(
+      'title' => t('Access TimelineJS JSON'),
+      'description' => t('View TimelineJS JSON'),
+    ),
     'access timelinejs block' => array(
-      'title' => t('Access TimelineJS Blocks'),
-      'description' => t('View TimelineJS Blocks'),
+      'title' => t('Access TimelineJS block'),
+      'description' => t('View TimelineJS block'),
     )
   );
 }

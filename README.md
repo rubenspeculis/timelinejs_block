@@ -7,8 +7,8 @@ To install:
 
 1. Enable TimelineJS Content Types.
 2. Enable TimelineJS Block.
-3. Download TimelineJS library from https://github.com/VeriteCo/TimelineJS and save it to /sites/all/libraries/ so that timeline.js can be found at /sites/all/libraries/TimelineJS/compiled/js/. I recomend using git clone https://github.com/VeriteCo/TimelineJS.git so you can carry out step 4 easily.
-4. Go to /sites/all/libraries/TimelineJS and run git reset --hard a80a7f75e71f018ab3e363543ed547e28034e03a as there are bugs in the current version of the library.
+3. Download TimelineJS library from https://github.com/rubenspeculis/TimelineJS and save it to /sites/all/libraries/ so that timeline.js can be found at /sites/all/libraries/TimelineJS/compiled/js/. I recomend using git clone https://github.com/rubenspeculis/TimelineJS.git.
+4. Clear Caches
 5. Check Status report to ensure that the library is successfully installed.
 
 ##Use

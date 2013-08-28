@@ -54,4 +54,6 @@ function timelinejs_block_init(){
   if (is_null(drupal_get_http_header('X-UA-Compatible'))) {
     drupal_add_http_header('X-UA-Compatible', 'IE=edge,chrome=1');
   }
+  $js_path = drupal_get_path('module', 'timelinejs_block').'/scripts/timeline_mod.js';
+  drupal_add_js($js_path);
 }

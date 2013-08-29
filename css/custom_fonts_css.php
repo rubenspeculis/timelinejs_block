@@ -9,7 +9,9 @@ $font_css = "
   .block-timelinejs-block .vco-storyjs blockquote,
   .block-timelinejs-block .vco-storyjs blockquote p,
   .block-timelinejs-block .vco-storyjs .twitter blockquote p {
-    font-family:'$font_family2',serif !Important;
+    font-family:arial,sans-serif !Important;
+    color: #000 !Important;
+    font-size: 13px !Important;
   }
   .block-timelinejs-block .timeline-tooltip {
     font-family:'$font_family1',sans-serif !Important;
@@ -21,7 +23,7 @@ $font_css = "
   .block-timelinejs-block .vco-storyjs .vco-feature h4,
   .block-timelinejs-block .vco-storyjs .vco-feature h5,
   .block-timelinejs-block .vco-storyjs .vco-feature h6 {
-    font-family:'$font_family2',serif !Important;
+    font-family:arial,sans-serif !Important;
   }
 
   .block-timelinejs-block .vco-storyjs .twitter,
@@ -60,6 +62,7 @@ $font_css = "
   .block-timelinejs-block  .vco-storyjs .flag-content h6,
   .block-timelinejs-block  .vco-storyjs .era h6 {
     font-family:'$font_family1',sans-serif !Important;
+    font-size: 14px !Important;
   }";
 
 echo $font_css;

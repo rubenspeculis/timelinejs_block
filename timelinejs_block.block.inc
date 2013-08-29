@@ -473,6 +473,7 @@ function timelinejs_block_block_content($identifier = 1) {
       }
     }
     // Timeline DIV
+    $content .= '<div class="access"><a href="#access">Jump to accessible version</a></div>';
     $content .= '<div id="timeline_'.$identifier.'"></div>';
     // Era nav below the timeline
     if($era_nav_display == 'below' || $era_nav_display == 'both'){
@@ -482,7 +483,7 @@ function timelinejs_block_block_content($identifier = 1) {
     }
     if($access == 1) {
       $table = _timelinejs_block_table_generator($identifier);
-      $content .= '<div id="timeline_table_'.$identifier.'" class="timelinejs_table">';
+      $content .= '<a name="access"><div id="timeline_table_'.$identifier.'" class="timelinejs_table">';
       $content .= $table;
       $content .= '</div>';
     }

@@ -36,6 +36,14 @@ echo <<<END
   margin-left: 8px !Important;
 }
 
+.block-timelinejs-block .nav-next:hover .icon {
+  background: url(../img/r-arrow_navigation.png) no-repeat !important;
+  margin-left: 10px !Important;
+}
+.block-timelinejs-block .nav-previous:hover .icon {
+  background: url(../img/l-arrow_navigation.png) no-repeat !Important;
+  margin-left: 6px !Important;
+}
 .block-timelinejs-block .nav-next:hover,
 .block-timelinejs-block .nav-previous:hover {
   color: $font_color !Important;

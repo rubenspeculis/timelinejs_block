@@ -1,0 +1,41 @@
+.slider-item .headline {
+  background: #558ca1;
+  color: #fff;
+  clear: both;
+  font-size: 18px;
+  float: left;
+  margin: 0 -140px;
+  padding: 10px 140px;
+  width: 960px;
+}
+
+
+.slider-item .content h2.date {
+  display: none !Important;
+}
+
+.vco-slider .slider-item .content {
+  display: block !Important;
+}
+
+.capitalize {
+  font-size: 18px !IMportant;
+/*  text-transform: uppercase;*/
+}
+
+.timelinejs_table td { border: 1px solid #ccc; }
+
+.timelinejs_table th {
+  background-color: #558ca1;
+  border: 1px solid #ccc;
+  color: #fff;
+}
+
+.access {
+  background-color: #cdcdcd;
+  padding: 10px;
+  text-align: right;
+}
+
+.vco-storyjs h2.start { font-size: 22px !important; }
+.vco-storyjs h3 { font-size: 22px !important; }

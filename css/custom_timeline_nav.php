@@ -14,11 +14,17 @@ $css .= '
     text-indent: -20px !Important;
   }';
 
-$css .= '.vco-timeline .vco-navigation .timenav .content .marker.active .flag { background: url(../img/timeline.png) !Important; color: #fff !Important }';
-$css .= '.vco-timeline .vco-navigation .timenav .content .marker.active .flag h3 { color: #ccc !Important }';
-$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag { background: url(../img/timeline.png) !Important; color: #fff !Important }';
-$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag h3 { color: #fff !Important }';
-
+$css .= '.vco-timeline .vco-navigation .timenav .content .marker.active .flag { background-image: url(../img/timeline.png) !Important; color: #fff !Important }';
+$css .= '.vco-timeline .vco-navigation .timenav .content .marker.active .flag h3 { color: #000 !Important }';
+$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag { background-image: url(../img/timeline.png) !Important; color: #fff !Important }';
+$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag:hover h3 { color: #000 !Important }';
+$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag h3 { color: #fff !Important; font-size: 11px !Important;   }';
+$css .= '.vco-notouch .vco-navigation .timenav .content .marker .flag .thumbnail { display:none !Important }';
+$css .= '.vco-timeline .vco-navigation .timenav-background .timenav-line { background-color: #000 !important; }';
+$css .= '.vco-notouch .vco-navigation .timenav .content .marker:hover .line,  .vco-notouch .vco-navigation .timenav .content .marker:hover .line .event-line { background: #fff !Important; }';
+$css .= '.vco-timeline .vco-navigation .timenav .content .marker .line .event-line { background: #fff !Important; }';
+$css .= '.vco-timeline .vco-navigation .timenav .content .marker .dot { background: #ccc !IMportant; }';
+$css .= '.vco-timeline .vco-navigation .timenav .content .marker.active .dot { background: #000 !IMportant; }';
 
 $css .= '.era-navigation li { display: inline;  margin-right: 6px;}';
 $css .= '.era-nav-label {font-weight: bold;}';
@@ -28,10 +34,10 @@ $css .= '.era-navigation-class .date { display: none; }';
 $css .= '.era-navigation-class h3 { font-size: 3em !Important; }';
 
 $css .= '.slider-item { background: url(../img/environment.jpg) no-repeat left top; margin: 0px -140px !important; padding: 0px 140px !Important; overflow-y: hidden !Important; }';
-$css .= '.slider-item .text { background: white; position: absolute; top:0px; right: 60px; height: 100% !important; padding: 20px !Important;overflow-y: auto !Important; width: 30% !Important;}';
-$css .= '.slider-item .text .container { display: block !Important; overflow-y: auto; height: 355px !Important; width: 100%; padding-left: 0px !Important; text-align: left !Important; }';
+$css .= '.slider-item .text { background: white; background: rgba(255, 255, 255, 0.8);  position: absolute; right: 90px; height: 280px !important; padding: 10px !Important;overflow-y: auto !Important; width: 25% !Important; top: 50px; -moz-border-radius: 10px; border-radius: 10px !Important; }';
+$css .= '.slider-item .text .container { display: block !Important; overflow-y: auto; height: 280px !Important; width: 100%; padding-left: 0px !Important; text-align: left !Important; overflow-x: hidden; color: #000 !Important; }';
 $css .= '.slider-item .text h3 {padding-top: 2px !Important; }';
-$css .= '.slider-item .media { width: 40% !Important; }';
+$css .= '.slider-item .media { width: 40% !Important; position:absolute; top: 50px; left: 10px; }';
 $css .= '.slider-item .media img {display:none !Important;}';
 $css .= '.slider-item .media .credit {display:none !Important;}';
 $css .= '.slider-item .media .caption {display:none !Important;}';
@@ -55,4 +61,10 @@ $css .= '.environment .media-image { display: none !Important; }';
 
 $css .= '.groundwater{ background: url(../img/groundwater.jpg) no-repeat left top; }';
 $css .= '.groundwater .media-image { display: none !Important; }';
+
+$css .= '.slider-item.video { background: url(../img/grad.png) repeat-x; }';
+$css .= '.slider-item.video .media{ top: 58px !Important; }';
+
+$css .= '.vco-timeline .vco-navigation .vco-toolbar { background-color: rgba(255,255,255, 0.8) !important; }';
+
 echo $css;

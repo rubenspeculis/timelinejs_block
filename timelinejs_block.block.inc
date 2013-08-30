@@ -234,7 +234,7 @@ function timelinejs_block_block_configure($delta){
       );
       $form['timelinejs_block_display']['timelinejs_block_showCat_table_'.$i] = array(
         '#type' => 'select',
-        '#title' => t('Do you want to showi the categories in the table at the bottom of this block?'),
+        '#title' => t('Do you want to show the categories in the table at the bottom of this block?'),
         '#default_value' => variable_get('timelinejs_block_showCat_table_'.$i, 'yes'),
         '#options' => array(
           'yes' => t('Yes'),
@@ -299,7 +299,7 @@ function timelinejs_block_block_configure($delta){
       $form['timelinejs_block_display']['timelinejs_block_cat_hide_'.$i] = array(
         '#type' => 'select',
         '#title' => t('Hide or show timeline category'),
-        '#description' => t('Determine whether to hide or hoe the timeline categories.'),
+        '#description' => t('Determine whether to hide or show the timeline categories.'),
         '#default_value' => variable_get('timelinejs_block_cat_hide_'.$i, 'show'),
         '#options' => array(
           'show' => t('Show'),
@@ -458,6 +458,7 @@ function timelinejs_block_block_content($identifier = 1) {
     $content .= "\twidth: '$width', height: '$height',\n";
     $content .= "\tsource: '/json/$identifier',\n";
     $content .= "\tstart_at_slide: '$starting_slide',\n";
+    $content .= "\tpreload: '100',\n";
     $content .= "\tstart_zoom_adjust: '$start_zoom',\n";
     $content .= "\thash_bookmark: true,\n";
     if($font!='other'){

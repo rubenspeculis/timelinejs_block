@@ -1,6 +1,6 @@
 
 /**
- * JS test file
+ * JS file
  */
 
 (function ($) {
@@ -13,17 +13,7 @@
         }, 'fast');
     });
 
-    $(document).on('keydown', '.storyjs-embed', function(e){
-      aa();
-    });
-    $(document).on('click', '.flag', aa);
-
-    $(document).on('UPDATE', '#storyjs-timeline', function(event) {
-      var target = event.target;
-      if($(target).hasClass('vco-slider')){
-        aa();
-      }
-    });
+    $(document).on('keydown click', 'body', populate_headline);
 
     $(document).on('LOADED', '#storyjs-timeline', function(event){
       var target = event.target;
@@ -37,22 +27,7 @@
     });
   });
 
-  function aa(){
-    $('.slider-item-container').children('div.slider-item').each(function(){
-      var date = $(this).find($('h2.date')).html();
-      var headline = '<span class="capitalize">' + $(this).find($('h3')).html() + '</span>';
-      if(!!date && !!headline){
-        var newHeadline = '<div class="headline">'+ headline + ' - ' + date  +'</div>';
-        var check = $(this).find($('div.headline'));
-        if(!!check){
-          $(this).find($('.headline')).remove();
-          $(this).prepend(newHeadline);
-        }
-      } 
-    });
-  }
-
-  function kk(event){
+  function populate_headline(){
     $('.slider-item-container').children('div.slider-item').each(function(){
       var date = $(this).find($('h2.date')).html();
       var headline = '<span class="capitalize">' + $(this).find($('h3')).html() + '</span>';
@@ -65,34 +40,6 @@
         }
       }
     });
-  }
-
-  $.eventReport = function(selector, root) {
-    var s = [];
-    $(selector || '*', root).andSelf().each(function() {
-
-        var e = $.data(this, 'events');
-        if(!e) return;
-        s.push(this.tagName);
-        if(this.id) s.push('#', this.id);
-        if(this.className) s.push('.', this.className.replace(/ +/g, '.'));
-        for(var p in e) {
-          var r = e[p],
-          h = r.length - r.delegateCount;
-          if(h)
-            s.push('\n', h, ' ', p, ' handler', h > 1 ? 's' : '');
-          if(r.delegateCount) {
-            for(var q = 0; q < r.length; q++)
-              if(r[q].selector) s.push('\n', p, ' for ', r[q].selector);
-          }
-        }
-        s.push('\n\n');
-      });
-    return s.join('');
-  }
-
-  $.fn.eventReport = function(selector) {
-    return $.eventReport(selector, this);
   }
 
 })(jQuery);

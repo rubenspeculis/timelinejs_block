@@ -56,9 +56,9 @@ function _timelinejs_block_table_generator($block_id = '1') {
   $table .= $header_row;
   $table .= $date_rows;
   $table .= "</table>";
-
-  $html = '<h2>'.$json['timeline']->headline.'</h2>';
-  $html .= '<p>'.$json['timeline']->text.'</p>';
+  $html = '';
+  //$html = '<h2>'.$json['timeline']->headline.'</h2>';
+  //if(isset($json['timeline']->text)) { $html .= '<p>'.$json['timeline']->text.'</p>'; }
   $html .= $table;
 
   return $html;

@@ -63,6 +63,8 @@ $font_css = "
   .block-timelinejs-block  .vco-storyjs .era h6 {
     font-family:'$font_family1',sans-serif !Important;
     font-size: 14px !Important;
+    line-height: 25px;
+    letter-spacing: 0;
   }";
 
 echo $font_css;

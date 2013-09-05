@@ -37,7 +37,7 @@ $css .= '.slider-item { background: url(../img/environment.jpg) no-repeat left t
 $css .= '.slider-item .text { background: white; background: rgba(255, 255, 255, 0.8);  position: absolute; right: 90px; height: 280px !important; padding: 10px !Important;overflow-y: auto !Important; width: 25% !Important; top: 50px; -moz-border-radius: 10px; border-radius: 10px !Important; }';
 $css .= '.slider-item .text .container { display: block !Important; overflow-y: auto; height: 280px !Important; width: 100%; padding-left: 0px !Important; text-align: left !Important; overflow-x: hidden; color: #000 !Important; }';
 $css .= '.slider-item .text h3 {padding-top: 2px !Important; }';
-$css .= '.slider-item .media { width: 40% !Important; position:absolute; top: 50px; left: 10px; }';
+$css .= '.slider-item .media { width: 40% !Important; position:absolute; top: 50px; left: 10px; overflow: hidden !Important; }';
 $css .= '.slider-item .media img {display:none !Important;}';
 $css .= '.slider-item .media .credit {display:none !Important;}';
 $css .= '.slider-item .media .caption {display:none !Important;}';
@@ -63,7 +63,7 @@ $css .= '.groundwater{ background: url(../img/groundwater.jpg) no-repeat left to
 $css .= '.groundwater .media-image { display: none !Important; }';
 
 $css .= '.slider-item.video { background: url(../img/grad.png) repeat-x; }';
-$css .= '.slider-item.video .media{ top: 58px !Important; }';
+$css .= '.slider-item.video .media{ top: 58px !Important; overflow: hidden !Important; height: 310px !Important; }';
 
 $css .= '.vco-timeline .vco-navigation .vco-toolbar { background-color: rgba(255,255,255, 0.8) !important; }';
 

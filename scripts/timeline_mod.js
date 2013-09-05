@@ -22,7 +22,7 @@
         // instance of the timeline 
         var newHeadline = '<div class="headline"><span class="capitalize">Basin Plan comes into effect</span> - November 2012 </div>';
         $('#timeline_1 .slider-item-container div.slider-item:nth-child(2)').prepend(newHeadline);
-        $('#timeline_1 .content .marker:nth-child(2) .flag').trigger('click');
+        //$('#timeline_1 .content .marker:nth-child(2) .flag').trigger('click');
       }
     });
   });

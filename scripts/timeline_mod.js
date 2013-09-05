@@ -15,7 +15,7 @@
 
     $(document).on('keydown click', 'body', populate_headline);
 
-    $(document).on('LOADED', '#storyjs-timeline', function(event){
+    $(document).on('LOADED UPDATED', '#storyjs-timeline', function(event){
       var target = event.target;
       if($(target).hasClass('vco-navigation')){
         // This is being used for the purpose of pre-propulating the first
@@ -24,6 +24,8 @@
         $('#timeline_1 .slider-item-container div.slider-item:nth-child(2)').prepend(newHeadline);
         //$('#timeline_1 .content .marker:nth-child(2) .flag').trigger('click');
       }
+      $('.time-interval div:nth-child(1)').remove();
+      $('.time-interval').prepend('<div style="text-indent: -7px; opacity: 100; left:1727.762557px">2012</div>');
     });
   });
 

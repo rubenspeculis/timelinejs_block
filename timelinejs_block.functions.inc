@@ -84,7 +84,6 @@ function _timelinejs_block_table_json_parse($block_identifier = '1') {
     'timeline' => $json->timeline,
     'dates' => $dates
   );
-
   return $results;
 
 }
@@ -109,8 +108,8 @@ function _timelinejs_block_era_sort($i, $j) {
 
 // Function to test if string is valid JSON
 function _timelinejs_block_isJson($string) {
-   json_decode($string);
-    return (json_last_error() == JSON_ERROR_NONE);
+  json_decode($string);
+  return (json_last_error() == JSON_ERROR_NONE);
 }
 
 // Function to build tableselect era options in block config.

@@ -39,3 +39,7 @@
 
 .vco-storyjs h2.start { font-size: 22px !important; }
 .vco-storyjs h3 { font-size: 22px !important; }
+
+#timeline_table_1 tr td {
+  vertical-align: top;
+}

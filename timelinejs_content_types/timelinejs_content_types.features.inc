@@ -13,6 +13,7 @@ function timelinejs_content_types_image_default_styles() {
   // Exported image style: timelinejs_thumb.
   $styles['timelinejs_thumb'] = array(
     'name' => 'timelinejs_thumb',
+    'label' => 'timelinejs_thumb',
     'effects' => array(
       2 => array(
         'label' => 'Scale and crop',

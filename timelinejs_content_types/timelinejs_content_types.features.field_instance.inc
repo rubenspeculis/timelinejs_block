@@ -10,6 +10,105 @@
 function timelinejs_content_types_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'node-timelinejs_chart-field_chart_value'
+  $field_instances['node-timelinejs_chart-field_chart_value'] = array(
+    'bundle' => 'timelinejs_chart',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_chart_value',
+    'label' => 'Value',
+    'required' => 1,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 31,
+    ),
+  );
+
+  // Exported field_instance: 'node-timelinejs_chart-field_dates'
+  $field_instances['node-timelinejs_chart-field_dates'] = array(
+    'bundle' => 'timelinejs_chart',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+        ),
+        'type' => 'date_default',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_dates',
+    'label' => 'Dates',
+    'required' => 1,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'Y-m-d H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'text_parts' => array(),
+        'year_range' => '1400:+50',
+      ),
+      'type' => 'date_select',
+      'weight' => 33,
+    ),
+  );
+
   // Exported field_instance: 'node-timelinejs_dates-body'
   $field_instances['node-timelinejs_dates-body'] = array(
     'bundle' => 'timelinejs_dates',
@@ -612,6 +711,7 @@ function timelinejs_content_types_field_default_field_instances() {
   t('Read More');
   t('Text');
   t('Timeline Category');
+  t('Value');
 
   return $field_instances;
 }

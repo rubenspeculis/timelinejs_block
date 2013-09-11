@@ -41,6 +41,14 @@ function timelinejs_content_types_image_default_styles() {
  */
 function timelinejs_content_types_node_info() {
   $items = array(
+    'timelinejs_chart' => array(
+      'name' => t('TimelineJS Chart'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('Headline'),
+      'help' => '',
+    ),
     'timelinejs_dates' => array(
       'name' => t('TimelineJS Dates'),
       'base' => 'node_content',

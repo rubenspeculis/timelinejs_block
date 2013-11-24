@@ -4,7 +4,7 @@
  */
 /* global jQuery:false */
 (function ($) {
-  "use strict";
+
   $(document).ready(function() {
     $('.access a').on('click', function(event){
       event.preventDefault();

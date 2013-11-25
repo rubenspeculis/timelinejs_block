@@ -4,9 +4,9 @@
   clear: both;
   font-size: 18px;
   float: left;
-  margin: 0 -130px;
-  padding: 10px 0;
-  width: 940px;
+  margin: 0 -140px;
+  padding: 10px 110px;
+  width: 980px;
 }
 
 

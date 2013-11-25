@@ -19,7 +19,7 @@ echo <<<END
 }
 
 .block-timelinejs-block .nav-next {
-  left: 910px !Important;
+  left: 1150px !Important;
 }
 
 .block-timelinejs-block .nav-next .nav-container,

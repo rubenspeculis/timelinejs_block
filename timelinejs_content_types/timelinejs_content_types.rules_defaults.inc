@@ -12,9 +12,10 @@ function timelinejs_content_types_default_rules_configuration() {
   $items['rules_generate_timeline_era_navigation_dates'] = entity_import('rules_config', '{ "rules_generate_timeline_era_navigation_dates" : {
       "LABEL" : "Generate Timeline Era Navigation Dates",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "TimelineJS" ],
       "REQUIRES" : [ "rules" ],
-      "ON" : [ "node_insert" ],
+      "ON" : { "node_insert" : [] },
       "IF" : [
         { "node_is_of_type" : {
             "node" : [ "node" ],
